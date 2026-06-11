@@ -1,15 +1,16 @@
 package ObjectPage;
 
-import Control.BaseController;
-import org.openqa.selenium.WebDriver;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import Control.BaseController;
 
 public class LoginPage extends BaseController {
-    private WebDriver driver;
+
+    public LoginPage() {
+        initPage();
+    }
 
     @FindBy(id = "username")
     private WebElement nombreUsuario;
@@ -30,10 +31,10 @@ public class LoginPage extends BaseController {
                 this.nombreUsuario.clear();
                 this.nombreUsuario.sendKeys(nUsuario);
             } else {
-                fail("No se encuentra el campo Nombre de Usuario en la página");
+                Assertions.fail("No se encuentra el campo Nombre de Usuario en la página");
             }
         } catch (Exception e) {
-            fail("Error al escribir en el campo de usuario: " + e.getMessage());
+            Assertions.fail("Error al escribir en el campo de usuario: " + e.getMessage());
         }
     }
 
@@ -42,7 +43,7 @@ public class LoginPage extends BaseController {
             this.passwordUsuario.clear();
             this.passwordUsuario.sendKeys(pass);
         } catch (Exception e) {
-            fail("Error al escribir en el campo de password: " + e.getMessage());
+            Assertions.fail("Error al escribir en el campo de password: " + e.getMessage());
         }
     }
 
@@ -50,7 +51,7 @@ public class LoginPage extends BaseController {
         try {
             this.btnSubmit.click();
         } catch (Exception e) {
-            fail("Error al hacer click en el botón Submit: " + e.getMessage());
+            Assertions.fail("Error al hacer click en el botón Submit: " + e.getMessage());
         }
     }
 
@@ -62,7 +63,7 @@ public class LoginPage extends BaseController {
                 System.out.println("Error al visualizar el mensaje de usuario inválido!");
             }
         }catch(Exception e){
-            fail("Error al detectar el mensaje de usuario inválido: "+e.getMessage());
+            Assertions.fail("Error al detectar el mensaje de usuario inválido: "+e.getMessage());
         }
     }
 

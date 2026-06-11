@@ -1,15 +1,16 @@
 package ObjectPage;
 
 import Control.BaseController;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class HomePage extends BaseController {
-    private WebDriver driver;
+
+    public HomePage() {
+        initPage();
+    }
     
     //@FindBy(xpath = "//button[contains(text(),'Congratulations student. You successfully logged in!')]")
     //private WebElement msgBienvenida;

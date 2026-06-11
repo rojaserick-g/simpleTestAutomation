@@ -1,26 +1,21 @@
 package Control;
 
-import Constant.Navegador;
-//import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.Map;
+import Constant.Navegador;
 
 public class DriverManager {
     private WebDriver driver;
-
-    private final DesiredCapabilities ConfiguracionesNav = new DesiredCapabilities();
 
     protected void resolverDriver(Navegador nav, String url){
         String os = System.getProperty("os.name").toLowerCase();
         String osVersion = System.getProperty("os.version").toLowerCase();
         System.out.println("\nSistema Operativo :" + os+", "+osVersion);
         System.out.println("\nNavegador :" + nav);
-        switch (nav){
-            case Chrome:
+        switch (nav) {
+            case Chrome -> {
                 System.out.println("Chrome seleccionado");
                 ChromeOptions configuracionChrome = new ChromeOptions();
                 if(os.contains("linux")){
@@ -37,13 +32,13 @@ public class DriverManager {
                 System.setProperty("webdriver.manager.verbose","true");
                 this.driver = new ChromeDriver(configuracionChrome);
                 this.driver.manage().deleteAllCookies();
-                break;
-            default:
-                System.out.println("No es posible levantar el navegador "+nav);
-                break;
+            }
+            default -> System.out.println("No es posible levantar el navegador " + nav);
         }
-        driver.manage().window().maximize();
-        driver.get(url);
+        if (this.driver != null) {
+            this.driver.manage().window().maximize();
+            this.driver.get(url);
+        }
     }
 
     protected WebDriver getDriver(){
