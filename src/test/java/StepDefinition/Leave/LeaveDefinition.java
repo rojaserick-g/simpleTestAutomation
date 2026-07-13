@@ -104,19 +104,13 @@ public class LeaveDefinition {
         inputEmpleado.clear();
         inputEmpleado.sendKeys(partialName);
 
+        // NUEVO: Forzar al test a esperar que el dropdown aparezca
+        // ANTES de que termine el paso y Cucumber tome la captura.
         try {
-            // 1. Esperamos a que el contenedor del dropdown aparezca
-            WebElement dropdown = wait.until(ExpectedConditions.visibilityOf(leavePage.getAutocompleteDropdown()));
-
-            // 2. Esperamos a que desaparezca el texto "Searching..." para asegurar que cargó los nombres
-            wait.until(ExpectedConditions.not(
-                    ExpectedConditions.textToBePresentInElement(dropdown, "Searching...")
-            ));
-
-            // 3. Un mini respiro final para asegurar que el navegador renderice visualmente las cajitas
-            Thread.sleep(700);
+            wait.until(ExpectedConditions.visibilityOf(leavePage.getAutocompleteDropdown()));
+            Thread.sleep(500); // Un leve respiro para que el DOM termine de renderizar las opciones
         } catch (Exception e) {
-            // Si algo falla, dejamos que continúe para no romper el flujo del test
+            // Si no aparece de inmediato, dejamos que continúe para que el siguiente paso maneje la aserción
         }
     }
 
