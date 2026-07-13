@@ -12,17 +12,20 @@ public class LoginPage extends BaseController {
         initPage();
     }
 
-    @FindBy(id = "username")
+    @FindBy(xpath = "//*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[1]/div/div[2]/input")
     private WebElement nombreUsuario;
 
-    @FindBy(css = "input[name='password']")
+    @FindBy(xpath="//*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[2]/div/div[2]/input")
     private WebElement passwordUsuario;
 
-    @FindBy(xpath = "//button[contains(text(),'Submit')]")
-    private WebElement btnSubmit;
+    @FindBy(css = ".orangehrm-login-button")
+    private WebElement btnLogin;
 
-    @FindBy(xpath = "//*[text() = 'Your username is invalid!']")
-    private WebElement msgUsuarioInvalido;
+    @FindBy(xpath = "//*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[1]/div/span")
+    private WebElement msgErrorUser;
+
+    @FindBy(xpath="//*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[2]/div/span")
+    private WebElement msgErrorPass;
 
 
     public void escribirUsersname(String nUsuario) {
@@ -47,17 +50,17 @@ public class LoginPage extends BaseController {
         }
     }
 
-    public void clickBtnSubmit() {
+    public void clickBtnLogin() {
         try {
-            this.btnSubmit.click();
+            this.btnLogin.click();
         } catch (Exception e) {
-            Assertions.fail("Error al hacer click en el botón Submit: " + e.getMessage());
+            Assertions.fail("Error al hacer click en el botón Login: " + e.getMessage());
         }
     }
 
     public void validarMsgUsuarioInvalido(){
         try {
-            if(this.msgUsuarioInvalido.isDisplayed()){
+            if(this.msgErrorUser.isDisplayed()){
                 System.out.println("Mensaje de usuario inválido visible");
             }else{
                 System.out.println("Error al visualizar el mensaje de usuario inválido!");
@@ -66,5 +69,19 @@ public class LoginPage extends BaseController {
             Assertions.fail("Error al detectar el mensaje de usuario inválido: "+e.getMessage());
         }
     }
+
+    public void validarMsgPasswordInvalido(){
+        try {
+            if(this.msgErrorPass.isDisplayed()){
+                System.out.println("Mensaje de password inválido visible");
+        }
+            else{
+                System.out.println("Error al visualizar el mensaje de password inválido!");
+            }
+        }catch(Exception e){
+            Assertions.fail("Error al detectar el mensaje de usuario inválido: "+e.getMessage());
+        }
+    }
+
 
 }
