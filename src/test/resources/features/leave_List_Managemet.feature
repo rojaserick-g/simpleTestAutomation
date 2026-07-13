@@ -37,3 +37,42 @@ Feature: Leave List Management
       | Li          |
       | Jo          |
       | Pa          |
+
+
+  @search_by_subunit @test-03
+  Scenario Outline: Search leave requests by sub unit "<subUnit>"
+    When the user selects sub unit "<subUnit>"
+    And hace clic en el boton buscar
+    Then all returned requests should belong to "<subUnit>"
+
+    Examples:
+      | subUnit         |
+      | Administration  |
+      | Engineering     |
+      | Human Resources |
+
+  @search_by_leave_type @test-04
+  Scenario Outline: Search leave requests by leave type "<leaveType>"
+    When the user selects leave type "<leaveType>"
+    And hace clic en el boton buscar
+    Then all leave records should have leave type "<leaveType>"
+
+    Examples:
+      | leaveType         |
+      | CAN - Vacation    |
+      | US - Personal     |
+      | CAN - Bereavement |
+
+  @search_by_leave_status @test-05
+  Scenario Outline: Search leave requests by leave status "<status>"
+    When the user selects leave status "<status>"
+    And hace clic en el boton buscar
+    Then all returned requests should have status "<status>"
+
+    Examples:
+      | status           |
+      | Scheduled        |
+      | Pending Approval |
+      | Rejected         |
+      | Cancelled        |
+      | Taken            |
