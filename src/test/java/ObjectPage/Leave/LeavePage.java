@@ -5,13 +5,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
-public class LeavePage {
-    WebDriver driver;
+public class LeavePage extends ObjectPage.LoginPage {
 
-    public LeavePage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+    public LeavePage() {
+        PageFactory.initElements(Control.DriverContext.getDriver(), this);
     }
 
     @FindBy(xpath = "//*[@id=\"app\"]/div[1]/div[1]/header/div[1]/div[1]/i")
@@ -33,7 +34,7 @@ public class LeavePage {
     public WebElement cbxShowLeaveStatus;
 
     @FindBy(xpath="//*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[1]/div/div[4]/div/div[2]/div/div/div[1]")
-    public WebElement cbxLeavelType; // Mantiene el nombre con el que lo declaraste original
+    public WebElement cbxLeavelType;
 
     @FindBy(xpath="//*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[2]/div/div[1]/div/div[2]/div/div/input")
     public WebElement txtEmployeeName;
@@ -42,10 +43,10 @@ public class LeavePage {
     public WebElement cbxSubUnit;
 
     @FindBy(xpath="//*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[2]/div/div[3]/div/label/span")
-    public WebElement btnPastEmployees; // Cambiado a public para consistencia
+    public WebElement btnPastEmployees;
 
     @FindBy(xpath="//*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[3]/button[2]")
-    public WebElement btnSearch; // Cambiado a public
+    public WebElement btnSearch;
 
     @FindBy(xpath = "//*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[3]/button[1]")
     public WebElement btnReset;
@@ -53,35 +54,37 @@ public class LeavePage {
     @FindBy(xpath="//*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[2]/div[2]/div/div/div[1]/div/div/div[2]/div/div/li/button/i")
     public WebElement btnOpciones;
 
-    public void navigateToLeaveList(){
-        leaveMenu.click();
-        btnLeave.click();
-        btnLeaveList.click();
+    @FindBy(xpath = "//label[text()='From Date']/ancestor::div[1]/following-sibling::div//input")
+    public WebElement txtFechaDesde;
+
+    @FindBy(xpath = "//label[text()='To Date']/ancestor::div[1]/following-sibling::div//input")
+    public WebElement txtFechaHasta;
+
+    @FindBy(xpath = "//div[@role='listbox' or contains(@class, 'oxd-autocomplete-dropdown')]")
+    private WebElement autocompleteDropdown;
+
+    public WebElement getAutocompleteDropdown() {
+        return autocompleteDropdown;
     }
 
-    // selecciona las opciones de los combos de orange HR
-    public void selectDropdownOption(WebElement dropdown, String optionText){
-        dropdown.click();
-        WebElement option = driver.findElement(By.xpath("//div[@role='listbox']//span[text()='" + optionText + "']"));
+    // SOLUCIÓN AL NULL POINTER: Apuntar directamente al contexto real del Driver
+    public WebDriver getDriver() {
+        return Control.DriverContext.getDriver();
+    }
+
+    public void navigateToLeaveList(){
+        btnLeave.click();
+    }
+
+    public void selectDropdownOption(WebDriver driver, WebElement dropdownContainer, String optionText) {
+        dropdownContainer.click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        By optionLocator = By.xpath("//div[@role='listbox']//span[text()='" + optionText + "']");
+        WebElement option = wait.until(ExpectedConditions.elementToBeClickable(optionLocator));
         option.click();
     }
 
-    // flujo que rellena
-    public void fillLeaveSearchFrom(String fromDateValue, String toDateValue, String status, String leaveType, String employee, String subUnit, boolean includePast){
-        // Se usan los nombres exactos declarados arriba
-        fromDate.sendKeys(fromDateValue);
-        toDate.sendKeys(toDateValue);
-
-        // combo box metodo dinamico
-        selectDropdownOption(cbxShowLeaveStatus, status);
-        selectDropdownOption(cbxLeavelType, leaveType); // Corregido para que coincida con el @FindBy
-
-        txtEmployeeName.sendKeys(employee);
-        selectDropdownOption(cbxSubUnit, subUnit);
-
-        if(includePast){
-            btnPastEmployees.click();
-        }
-        btnSearch.click();
+    public WebElement getTxtEmployeeName() {
+        return txtEmployeeName;
     }
 }

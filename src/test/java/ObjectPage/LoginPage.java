@@ -1,12 +1,15 @@
 package ObjectPage;
 
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import Control.BaseController;
 
 public class LoginPage extends BaseController {
+
+    public static SearchContext driver;
 
     public LoginPage() {
         initPage();
