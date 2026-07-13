@@ -1,6 +1,7 @@
 package StepDefinition;
 
 import ObjectPage.LoginPage;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -20,14 +21,24 @@ public class LoginDefinition {
         loginPage.escribirPassword(pass);
     }
 
-    @When("presiono el boton Submit")
-    public void presionoElBotonSubmit() {
-        loginPage.clickBtnSubmit();
+    @When("presiono el boton Login")
+    public void presionoElBotonLogin() {
+        loginPage.clickBtnLogin();
+        try {
+            Thread.sleep(2000); // Espera de 2 segundos
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Then("se valida el mensaje usuario invalido")
-    public void seValidaElMensajeUsuarioInvalido() {
+    @Then("se valida el mensaje de login invalido")
+    public void seValidaElMensajeDeLoginInvalido() {
         loginPage.validarMsgUsuarioInvalido();
+    }
+
+    @Then("se valida el mensaje de pass invalido")
+    public void seValidaElMensajeDePassInvalido() {
+        loginPage.validarMsgPasswordInvalido();
     }
 
 }

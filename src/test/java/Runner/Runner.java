@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
         glue = {"StepDefinition"},
         plugin = {"pretty", "html:target/cucumber-report.html"},
         monochrome = true,
-        tags = "@rutaCritica"
+        tags = "@search_leave_request or @validate_autocomplete"
 )
 
 public class Runner {
