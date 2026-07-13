@@ -36,7 +36,8 @@ public class DriverManager {
             default -> System.out.println("No es posible levantar el navegador " + nav);
         }
         if (this.driver != null) {
-            this.driver.manage().window().maximize();
+            //this.driver.manage().window().maximize();
+            this.driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920,1080));
             this.driver.get(url);
         }
     }
