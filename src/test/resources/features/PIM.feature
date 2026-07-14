@@ -90,3 +90,106 @@ Feature: Employee List Search and Filters
       | Engineering       |
       | Development       |
       | Quality Assurance |
+
+  @PIM @TC-008
+  Scenario Outline: Search employees by supervisor
+    When the user selects supervisor "<supervisor>"
+    And clicks Search
+    Then every result should report to supervisor "<supervisor>"
+    Examples:
+      | supervisor       |
+      | John Smith       |
+      | Peter Anderson   |
+      | Linda Brown      |
+
+  @PIM @TC-009
+  Scenario Outline: Search employee with multiple filters
+    When the user enters employee name "<employeeName>"
+    And selects employment status "<status>"
+    And selects job title "<jobTitle>"
+    And selects sub unit "<subUnit>"
+    And clicks Search
+    Then every result should match all selected criteria
+
+    Examples:
+      | employeeName | status | jobTitle | subUnit |
+      | James        |        |          |          |
+
+  @PIM @TC-010
+  Scenario Outline: Reset search filters
+    Given the user performs a search using:
+      | employeeName | status |
+      | <employeeName> | <status> |
+    When the user clicks Reset
+    Then all search fields should be cleared
+    And default values should be restored
+
+    Examples:
+      | employeeName | status              |
+      | James        | Freelance           |
+      | Amelia       | Full-Time Contract  |
+
+  #@PIM @TC-011
+  #Scenario Outline: Validate employee information from list and detail page
+   # When the user opens employee "<employeeName>" from the search results
+    #Then employee detail page should display:
+     # | field | value |
+     # | Name  | <employeeName> |
+     # | Id    | <employeeId> |
+
+    #Examples:
+     # | employeeName | employeeId |
+      #| James        | 0365 |
+
+  @PIM @TC-012
+  Scenario Outline: Navigate through employee list pages
+    When the user navigates to page "<pageNumber>"
+    Then page "<pageNumber>" should be displayed
+    And employee records should be loaded
+
+    Examples:
+      | pageNumber |
+      | 1 |
+      | 2 |
+      | 3 |
+
+  @PIM @TC-013
+  Scenario Outline: Validate XSS protection in employee name search
+    When the user enters "<maliciousInput>" in Employee Name field
+    And clicks Search
+    Then no script should be executed
+    And the application should remain stable
+
+    Examples:
+      | maliciousInput               |
+      | <script>alert('xss')</script> |
+      | x                            |
+
+  @PIM @TC-014
+  Scenario Outline: Validate SQL Injection protection
+    When the user enters "<maliciousInput>" into Employee Name
+    And clicks Search
+    Then unauthorized records should not be returned
+    And the application should remain stable
+
+    Examples:
+      | maliciousInput              |
+      | ' OR 1=1 --                 |
+      | admin' --                   |
+      | ' UNION SELECT * FROM users -- |
+
+  @PIM @TC-015
+  Scenario Outline: Create and find employee
+
+    Given a new employee is created with:
+      | firstName | lastName |
+      | <firstName> | <lastName> |
+
+    When the user searches using generated employee id
+
+    Then the created employee should be displayed
+
+    Examples:
+
+      | firstName | lastName |
+      | Leslie    | Prueba   |

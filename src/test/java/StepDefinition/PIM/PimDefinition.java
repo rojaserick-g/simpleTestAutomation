@@ -4,6 +4,10 @@ import ObjectPage.PimPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en.Given;
+import io.cucumber.datatable.DataTable;
+import java.util.List;
+import java.util.Map;
 
 public class PimDefinition {
 
@@ -44,6 +48,7 @@ public class PimDefinition {
     public void theSystemShouldReturnRecordS(String cantidad) {
         pimPage.validarCantidadRegistros(cantidad);
     }
+
     @When("the user searches employee {string}")
     public void theUserSearchesEmployee(String nombre) {
         pimPage.escribirNombreEmpleado(nombre);
@@ -55,18 +60,21 @@ public class PimDefinition {
         pimPage.validarResultadosVisibles();
         pimPage.validarNombreEmpleado(nombreEsperado);
     }
+
     @When("the user selects employment status {string}")
     public void theUserSelectsEmploymentStatus(String estado) {
 
         pimPage.seleccionarEmploymentStatus(estado);
 
     }
+
     @Then("every result should have employment status {string}")
     public void everyResultShouldHaveEmploymentStatus(String estado) {
 
         pimPage.validarResultadosVisibles();
 
     }
+
     @When("the user selects include option {string}")
     public void theUserSelectsIncludeOption(String opcion) {
 
@@ -80,6 +88,7 @@ public class PimDefinition {
         pimPage.validarResultadosVisibles();
 
     }
+
     @When("the user selects job title {string}")
     public void theUserSelectsJobTitle(String cargo) {
 
@@ -93,6 +102,7 @@ public class PimDefinition {
         pimPage.validarResultadosVisibles();
 
     }
+
     @When("the user selects sub unit {string}")
     public void theUserSelectsSubUnit(String subUnit) {
 
@@ -104,6 +114,175 @@ public class PimDefinition {
     public void everyResultShouldBelongToSubUnit(String subUnit) {
 
         pimPage.validarResultadosVisibles();
+
+    }
+
+    @When("the user selects supervisor {string}")
+    public void theUserSelectsSupervisor(String supervisor) {
+
+        pimPage.seleccionarSupervisor(supervisor);
+
+    }
+
+    @Then("every result should report to supervisor {string}")
+    public void everyResultShouldReportToSupervisor(String supervisor) {
+
+        pimPage.validarResultadosVisibles();
+
+    }
+
+    @When("the user enters employee name {string}")
+    public void theUserEntersEmployeeName(String employeeName) {
+
+        pimPage.ingresarNombreEmpleado(employeeName);
+
+    }
+
+    @When("selects employment status {string}")
+    public void selectsEmploymentStatus(String status) {
+
+        if (!status.trim().isEmpty()) {
+            pimPage.seleccionarEmploymentStatus(status);
+        }
+
+    }
+
+    @When("selects job title {string}")
+    public void selectsJobTitle(String jobTitle) {
+
+        if (!jobTitle.trim().isEmpty()) {
+            pimPage.seleccionarJobTitle(jobTitle);
+        }
+
+    }
+
+    @When("selects sub unit {string}")
+    public void selectsSubUnit(String subUnit) {
+
+        if (!subUnit.trim().isEmpty()) {
+            pimPage.seleccionarSubUnit(subUnit);
+        }
+
+    }
+
+    @Then("every result should match all selected criteria")
+    public void everyResultShouldMatchAllSelectedCriteria() {
+
+        pimPage.validarResultadosFiltros();
+
+    }
+    @io.cucumber.java.en.Given("the user performs a search using:")
+    public void theUserPerformsASearchUsing(io.cucumber.datatable.DataTable dataTable) {
+
+        java.util.List<java.util.Map<String,String>> datos = dataTable.asMaps(String.class,String.class);
+
+        String nombre = datos.get(0).get("employeeName");
+        String estado = datos.get(0).get("status");
+
+        pimPage.escribirNombreEmpleado(nombre);
+
+        if(!estado.trim().isEmpty()){
+            pimPage.seleccionarEmploymentStatus(estado);
+        }
+
+        pimPage.clickSearch();
+
+    }
+
+    @When("the user clicks Reset")
+    public void theUserClicksReset() {
+
+        pimPage.clickReset();
+
+    }
+
+    @Then("all search fields should be cleared")
+    public void allSearchFieldsShouldBeCleared() {
+
+        pimPage.validarCamposReseteados();
+
+    }
+
+    @Then("default values should be restored")
+    public void defaultValuesShouldBeRestored() {
+
+        pimPage.validarCamposReseteados();
+
+    }
+    @When("the user navigates to page {string}")
+    public void theUserNavigatesToPage(String pagina) {
+
+        pimPage.navegarPagina(pagina);
+
+    }
+
+    @Then("page {string} should be displayed")
+    public void pageShouldBeDisplayed(String pagina) {
+
+        pimPage.validarPagina(pagina);
+
+    }
+
+    @Then("employee records should be loaded")
+    public void employeeRecordsShouldBeLoaded() {
+
+        pimPage.validarRegistrosPagina();
+
+    }
+    @Then("no script should be executed")
+    public void noScriptShouldBeExecuted() {
+
+        pimPage.validarNoEjecucionScript();
+
+    }
+
+    @Then("the application should remain stable")
+    public void theApplicationShouldRemainStable() {
+
+        pimPage.validarAplicacionEstable();
+
+    }
+    @When("the user enters {string} into Employee Name")
+    public void theUserEntersIntoEmployeeName(String maliciousInput) {
+
+        pimPage.escribirNombreEmpleado(maliciousInput);
+
+    }
+
+    @Then("unauthorized records should not be returned")
+    public void unauthorizedRecordsShouldNotBeReturned() {
+
+        pimPage.validarSQLInjection();
+
+    }
+    @Given("a new employee is created with:")
+    public void aNewEmployeeIsCreatedWith(DataTable dataTable) {
+
+        List<Map<String,String>> datos =
+                dataTable.asMaps(String.class,String.class);
+
+        String nombre = datos.get(0).get("firstName");
+        String apellido = datos.get(0).get("lastName");
+
+        pimPage.clickAdd();
+
+        pimPage.ingresarNuevoEmpleado(nombre,apellido);
+
+        pimPage.guardarEmployeeId();
+
+        pimPage.guardarEmpleado();
+
+    }
+    @When("the user searches using generated employee id")
+    public void theUserSearchesUsingGeneratedEmployeeId() {
+
+        pimPage.buscarEmpleadoCreado();
+
+    }
+    @Then("the created employee should be displayed")
+    public void theCreatedEmployeeShouldBeDisplayed() {
+
+        pimPage.validarEmpleadoCreado();
 
     }
 }

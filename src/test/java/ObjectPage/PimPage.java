@@ -1,5 +1,4 @@
 package ObjectPage;
-
 import Control.BaseController;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebElement;
@@ -36,6 +35,11 @@ public class PimPage extends BaseController {
     private WebElement cmbJobTitle;
     @FindBy(xpath = "(//div[contains(@class,'oxd-select-text')])[4]")
     private WebElement cmbSubUnit;
+    @FindBy(xpath = "//label[text()='Supervisor Name']/../following-sibling::div//input")
+    private WebElement txtSupervisor;
+
+    @FindBy(xpath = "//div[@role='listbox']//span")
+    private List<WebElement> listaSupervisor;
     @FindBy(xpath = "//div[@role='listbox']//span")
     private List<WebElement> listaSubUnit;
 
@@ -58,6 +62,35 @@ public class PimPage extends BaseController {
     private WebElement lblNoRecords;
     @FindBy(xpath = "//div[contains(@class,'oxd-table-card')]")
     private java.util.List<WebElement> registrosEncontrados;
+    @FindBy(xpath = "//button[@type='reset']")
+    private WebElement btnReset;
+    @FindBy(name = "firstName")
+    private WebElement txtFirstNameDetalle;
+    @FindBy(xpath = "(//button[contains(@class,'oxd-icon-button')])[1]")
+    private WebElement btnEditar;
+    @FindBy(xpath = "//label[text()='Employee Id']/ancestor::div[contains(@class,'oxd-input-group')]//input")
+    private WebElement txtEmployeeIdDetalle;
+    @FindBy(xpath = "//button[contains(@class,'oxd-pagination-page-item')]")
+    private List<WebElement> paginas;
+
+    @FindBy(xpath = "//div[contains(@class,'oxd-table-card')]")
+    private List<WebElement> registrosPagina;
+    @FindBy(xpath = "//button[text()=' Add ']")
+    private WebElement btnAdd;
+
+    @FindBy(name = "firstName")
+    private WebElement txtFirstName;
+
+    @FindBy(name = "lastName")
+    private WebElement txtLastName;
+
+    @FindBy(xpath = "//button[@type='submit']")
+    private WebElement btnSave;
+
+    @FindBy(xpath = "//label[text()='Employee Id']/../following-sibling::div/input")
+    private WebElement txtEmployeeIdNuevo;
+    @FindBy(xpath = "//a[text()='Employee List']")
+    private WebElement btnEmployeeList;
 
     public void ingresarModuloPim() {
         try {
@@ -96,18 +129,19 @@ public class PimPage extends BaseController {
             Assertions.fail("Error al presionar Search: " + e.getMessage());
         }
     }
-    public void seleccionarEmploymentStatus(String estado){
 
-        try{
+    public void seleccionarEmploymentStatus(String estado) {
 
-            visualizarElemento(cmbEmploymentStatus,10);
+        try {
+
+            visualizarElemento(cmbEmploymentStatus, 10);
             cmbEmploymentStatus.click();
 
             Thread.sleep(1000);
 
-            for(WebElement opcion : listaEmploymentStatus){
+            for (WebElement opcion : listaEmploymentStatus) {
 
-                if(opcion.getText().trim().equalsIgnoreCase(estado)){
+                if (opcion.getText().trim().equalsIgnoreCase(estado)) {
 
                     opcion.click();
                     break;
@@ -116,25 +150,26 @@ public class PimPage extends BaseController {
 
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
 
             Assertions.fail("Error seleccionando Employment Status: " + e.getMessage());
 
         }
 
     }
-    public void seleccionarInclude(String opcion){
 
-        try{
+    public void seleccionarInclude(String opcion) {
 
-            visualizarElemento(cmbInclude,10);
+        try {
+
+            visualizarElemento(cmbInclude, 10);
             cmbInclude.click();
 
             Thread.sleep(1000);
 
-            for(WebElement item : listaInclude){
+            for (WebElement item : listaInclude) {
 
-                if(item.getText().trim().equalsIgnoreCase(opcion)){
+                if (item.getText().trim().equalsIgnoreCase(opcion)) {
 
                     item.click();
                     break;
@@ -143,25 +178,26 @@ public class PimPage extends BaseController {
 
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
 
             Assertions.fail("Error seleccionando Include: " + e.getMessage());
 
         }
 
     }
-    public void seleccionarJobTitle(String cargo){
 
-        try{
+    public void seleccionarJobTitle(String cargo) {
 
-            visualizarElemento(cmbJobTitle,10);
+        try {
+
+            visualizarElemento(cmbJobTitle, 10);
             cmbJobTitle.click();
 
             Thread.sleep(1000);
 
-            for(WebElement opcion : listaJobTitle){
+            for (WebElement opcion : listaJobTitle) {
 
-                if(opcion.getText().trim().equalsIgnoreCase(cargo)){
+                if (opcion.getText().trim().equalsIgnoreCase(cargo)) {
 
                     opcion.click();
                     break;
@@ -170,25 +206,26 @@ public class PimPage extends BaseController {
 
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
 
             Assertions.fail("Error seleccionando Job Title: " + e.getMessage());
 
         }
 
     }
-    public void seleccionarSubUnit(String subUnit){
 
-        try{
+    public void seleccionarSubUnit(String subUnit) {
 
-            visualizarElemento(cmbSubUnit,10);
+        try {
+
+            visualizarElemento(cmbSubUnit, 10);
             cmbSubUnit.click();
 
             Thread.sleep(1000);
 
-            for(WebElement opcion : listaSubUnit){
+            for (WebElement opcion : listaSubUnit) {
 
-                if(opcion.getText().trim().equalsIgnoreCase(subUnit)){
+                if (opcion.getText().trim().equalsIgnoreCase(subUnit)) {
 
                     opcion.click();
                     break;
@@ -197,7 +234,7 @@ public class PimPage extends BaseController {
 
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
 
             Assertions.fail("Error seleccionando Sub Unit: " + e.getMessage());
 
@@ -294,5 +331,320 @@ public class PimPage extends BaseController {
             Assertions.fail("Error validando cantidad de registros: " + e.getMessage());
 
         }
+    }
+
+    public void seleccionarSupervisor(String supervisor) {
+
+        try {
+
+            visualizarElemento(txtSupervisor, 10);
+            txtSupervisor.clear();
+            txtSupervisor.sendKeys(supervisor);
+
+            Thread.sleep(2000);
+
+            for (WebElement opcion : listaSupervisor) {
+
+                if (opcion.getText().trim().equalsIgnoreCase(supervisor)) {
+
+                    opcion.click();
+                    break;
+
+                }
+
+            }
+
+        } catch (Exception e) {
+
+            Assertions.fail("Error seleccionando Supervisor: " + e.getMessage());
+
+        }
+
+    }
+
+    public void ingresarNombreEmpleado(String nombre) {
+        txtEmployeeName.clear();
+        txtEmployeeName.sendKeys(nombre);
+    }
+
+    public void validarResultadosFiltros() {
+
+        try {
+
+            visualizarElemento(tablaResultados, 10);
+
+            Assertions.assertTrue(
+                    tablaResultados.isDisplayed(),
+                    "La tabla de resultados no se muestra.");
+
+            Assertions.assertFalse(
+                    registrosEncontrados.isEmpty(),
+                    "No se encontraron registros.");
+
+        } catch (Exception e) {
+
+            Assertions.fail("Error validando resultados: " + e.getMessage());
+
+        }
+
+    }
+
+    public void clickReset() {
+
+        try {
+
+            visualizarElemento(btnReset, 10);
+            btnReset.click();
+
+        } catch (Exception e) {
+
+            Assertions.fail("Error al presionar Reset: " + e.getMessage());
+
+        }
+
+    }
+
+    public void validarCamposReseteados() {
+
+        try {
+
+            Assertions.assertEquals("", txtEmployeeName.getAttribute("value"));
+
+            Assertions.assertEquals("", txtEmployeeId.getAttribute("value"));
+
+        } catch (Exception e) {
+
+            Assertions.fail("Error validando campos reseteados: " + e.getMessage());
+
+        }
+
+    }
+
+    public void abrirDetalleEmpleado() {
+
+        try {
+
+            visualizarElemento(btnEditar, 10);
+            btnEditar.click();
+
+        } catch (Exception e) {
+
+            Assertions.fail("Error al abrir el detalle del empleado: " + e.getMessage());
+
+        }
+
+    }
+
+    public void validarDetalleEmpleado(String nombre, String id) {
+
+        try {
+
+            visualizarElemento(txtFirstNameDetalle, 10);
+
+            Assertions.assertEquals(
+                    nombre,
+                    txtFirstNameDetalle.getAttribute("value"));
+
+            Assertions.assertEquals(
+                    id,
+                    txtEmployeeIdDetalle.getAttribute("value"));
+
+        } catch (Exception e) {
+
+            Assertions.fail("Error validando detalle del empleado: " + e.getMessage());
+
+        }
+
+    }
+
+    //metodo para navegar
+    public void navegarPagina(String pagina) {
+
+        try {
+
+
+        } catch (Exception e) {
+
+            Assertions.fail("Error navegando: " + e.getMessage());
+
+        }
+
+    }   // <-- ESTA LLAVE FALTABA
+
+
+    //validar pagina
+    public void validarPagina(String pagina) {
+
+        try {
+
+            visualizarElemento(tablaResultados, 10);
+
+            Assertions.assertTrue(
+                    tablaResultados.isDisplayed(),
+                    "La tabla no se muestra.");
+
+        } catch (Exception e) {
+
+            Assertions.fail("Error validando página: " + e.getMessage());
+
+        }
+
+    }   // <-- Solo una llave para cerrar el método
+
+    // validar registro
+    public void validarRegistrosPagina() {
+
+        try {
+
+            Assertions.assertFalse(
+                    registrosEncontrados.isEmpty(),
+                    "No existen registros en la página.");
+
+        } catch (Exception e) {
+
+            Assertions.fail("Error validando registros: " + e.getMessage());
+
+        }
+
+    }
+    public void validarNoEjecucionScript() {
+
+        try {
+
+            visualizarElemento(tablaResultados,10);
+
+            Assertions.assertTrue(
+                    tablaResultados.isDisplayed(),
+                    "La aplicación ejecutó un script o dejó de responder.");
+
+        } catch (Exception e){
+
+            Assertions.fail("Error validando protección XSS: " + e.getMessage());
+
+        }
+
+    }
+    public void validarAplicacionEstable() {
+
+        try {
+
+            Assertions.assertTrue(
+                    DriverContext.getDriver().getCurrentUrl().contains("pim"),
+                    "La aplicación salió del módulo PIM.");
+
+        } catch (Exception e){
+
+            Assertions.fail("La aplicación no permanece estable: " + e.getMessage());
+
+        }
+
+    }
+    public void validarSQLInjection() {
+
+        try {
+
+            visualizarElemento(tablaResultados,10);
+
+            Assertions.assertTrue(
+                    tablaResultados.isDisplayed(),
+                    "La aplicación devolvió un resultado inesperado.");
+
+        } catch (Exception e){
+
+            Assertions.fail("Error validando SQL Injection: " + e.getMessage());
+
+        }
+
+    }
+    //abrir add employee
+    public void clickAdd() {
+
+        try {
+
+            visualizarElemento(btnAdd,10);
+            btnAdd.click();
+
+        } catch (Exception e){
+
+            Assertions.fail("Error al abrir Add Employee: " + e.getMessage());
+
+        }
+
+    }
+    public void volverEmployeeList(){
+
+        try{
+
+            visualizarElemento(btnEmployeeList,10);
+            btnEmployeeList.click();
+
+        }catch(Exception e){
+
+            Assertions.fail("Error al volver a Employee List: " + e.getMessage());
+
+        }
+
+    }
+    //ingresar nombre
+    public void ingresarNuevoEmpleado(String nombre,String apellido){
+
+        try{
+
+            visualizarElemento(txtFirstName,10);
+
+            txtFirstName.clear();
+            txtFirstName.sendKeys(nombre);
+
+            txtLastName.clear();
+            txtLastName.sendKeys(apellido);
+
+        }catch(Exception e){
+
+            Assertions.fail("Error ingresando empleado: " + e.getMessage());
+
+        }
+
+    }
+    //para guardar
+    public void guardarEmpleado(){
+
+        try{
+
+            visualizarElemento(btnSave,10);
+            btnSave.click();
+
+        }catch(Exception e){
+
+            Assertions.fail("Error guardando empleado: " + e.getMessage());
+
+        }
+
+    }
+    //obtener el employee id
+    private String employeeIdGenerado;
+
+    public void guardarEmployeeId(){
+
+        employeeIdGenerado =
+                txtEmployeeIdNuevo.getAttribute("value");
+
+    }
+    //busco empleado creado
+    public void buscarEmpleadoCreado(){
+
+        volverEmployeeList();
+
+        escribirEmployeeId(employeeIdGenerado);
+
+        clickSearch();
+
+    }
+    //valido creacion
+    public void validarEmpleadoCreado(){
+
+        Assertions.assertFalse(
+                registrosEncontrados.isEmpty(),
+                "No se encontró el empleado creado.");
+
     }
 }
