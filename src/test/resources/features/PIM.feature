@@ -76,3 +76,17 @@ Feature: Employee List Search and Filters
       | Account Assistant        |
       | Automation Engineer L000 |
       | Automation Tester        |
+
+  @PIM @TC-007
+  Scenario Outline: Search employees by sub unit
+    When the user selects sub unit "<subUnit>"
+    And clicks Search
+    Then every result should belong to sub unit "<subUnit>"
+
+    Examples:
+      | subUnit           |
+      | OrangeHRM Inc.    |
+      | Administration    |
+      | Engineering       |
+      | Development       |
+      | Quality Assurance |

@@ -93,4 +93,17 @@ public class PimDefinition {
         pimPage.validarResultadosVisibles();
 
     }
+    @When("the user selects sub unit {string}")
+    public void theUserSelectsSubUnit(String subUnit) {
+
+        pimPage.seleccionarSubUnit(subUnit);
+
+    }
+
+    @Then("every result should belong to sub unit {string}")
+    public void everyResultShouldBelongToSubUnit(String subUnit) {
+
+        pimPage.validarResultadosVisibles();
+
+    }
 }

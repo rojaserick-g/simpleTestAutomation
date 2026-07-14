@@ -34,6 +34,10 @@ public class PimPage extends BaseController {
     private WebElement cmbInclude;
     @FindBy(xpath = "(//div[contains(@class,'oxd-select-text')])[3]")
     private WebElement cmbJobTitle;
+    @FindBy(xpath = "(//div[contains(@class,'oxd-select-text')])[4]")
+    private WebElement cmbSubUnit;
+    @FindBy(xpath = "//div[@role='listbox']//span")
+    private List<WebElement> listaSubUnit;
 
     @FindBy(xpath = "//div[@role='listbox']//span")
     private java.util.List<WebElement> listaJobTitle;
@@ -169,6 +173,33 @@ public class PimPage extends BaseController {
         }catch(Exception e){
 
             Assertions.fail("Error seleccionando Job Title: " + e.getMessage());
+
+        }
+
+    }
+    public void seleccionarSubUnit(String subUnit){
+
+        try{
+
+            visualizarElemento(cmbSubUnit,10);
+            cmbSubUnit.click();
+
+            Thread.sleep(1000);
+
+            for(WebElement opcion : listaSubUnit){
+
+                if(opcion.getText().trim().equalsIgnoreCase(subUnit)){
+
+                    opcion.click();
+                    break;
+
+                }
+
+            }
+
+        }catch(Exception e){
+
+            Assertions.fail("Error seleccionando Sub Unit: " + e.getMessage());
 
         }
 

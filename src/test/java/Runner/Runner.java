@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
         glue = {"StepDefinition"},
         plugin = {"pretty", "html:target/cucumber-report.html"},
         monochrome = true,
-        tags =  "@TC-006"
+        tags =  "@TC-007"
 )
 
 public class Runner {
