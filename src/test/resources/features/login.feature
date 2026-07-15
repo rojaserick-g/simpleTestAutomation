@@ -20,6 +20,7 @@ Feature: funcionalidad de login
 
 
 
+
   #@testCase_2 @rutaCritica
   #Scenario: Validar login con credenciales invalidas
    # Given abrir el navegador en la url "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"

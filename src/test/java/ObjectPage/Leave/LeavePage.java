@@ -1,5 +1,6 @@
 package ObjectPage.Leave;
 
+import Control.BaseController;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,8 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
-public class LeavePage extends ObjectPage.LoginPage {
-
+public class LeavePage extends BaseController {
     public LeavePage() {
         PageFactory.initElements(Control.DriverContext.getDriver(), this);
     }
@@ -19,7 +19,7 @@ public class LeavePage extends ObjectPage.LoginPage {
     @FindBy(xpath = "//*[@id=\"app\"]/div[1]/div[1]/header/div[1]/div[1]/i")
     public WebElement leaveMenu;
 
-    @FindBy(xpath = "//*[@id=\"app\"]/div[1]/div[1]/aside/nav/div[2]/ul/li[3]/a/span")
+    @FindBy(xpath = "//span[normalize-space()='Leave']")
     public WebElement btnLeave;
 
     @FindBy(xpath = "//*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[2]/div[3]/button/i")
@@ -73,7 +73,7 @@ public class LeavePage extends ObjectPage.LoginPage {
     @FindBy(xpath = "//label[text()='Leave Type']/ancestor::div[1]/following-sibling::div//div[contains(@class, 'oxd-select-wrapper')]")
     public WebElement cbxLeaveType;
 
-    @FindBy(xpath = "//div[contains(@class, 'oxd-input-group')][descendant::label[contains(translate(text(), 'LEAVE WITH STATUS', 'leave with status'), 'leave with status')]]//div[contains(@class, 'oxd-multiselect-wrapper') or contains(@class, 'oxd-select-wrapper')]")
+    @FindBy(xpath = "//label[contains(.,'Show Leave')]/following::div[contains(@class,'oxd-select-wrapper')][1]")
     public WebElement cbxLeaveStatus;
 
     @FindBy(xpath = "//div[contains(@class, 'oxd-input-group')][descendant::label[contains(translate(text(), 'LEAVE WITH STATUS', 'leave with status'), 'leave with status')]]//span[contains(@class, 'oxd-chip')]//i[contains(@class, 'oxd-chip-icon')]")
@@ -82,6 +82,9 @@ public class LeavePage extends ObjectPage.LoginPage {
     // Selector para la columna 'Status' de la tabla de resultados (usualmente es la columna 6)
     @FindBy(xpath = "//div[@class='oxd-table-body']//div[@role='row']/div[@role='cell'][6]")
     private List<WebElement> celdasLeaveStatus;
+
+    @FindBy(xpath = "//label[contains(.,'Show Leave')]/following::div[contains(@class,'oxd-select-wrapper')][1]")
+    public WebElement cbxShowLeaveStatusContainer;
 
 
     public WebElement getAutocompleteDropdown() {
@@ -92,15 +95,44 @@ public class LeavePage extends ObjectPage.LoginPage {
         return Control.DriverContext.getDriver();
     }
 
-    public void navigateToLeaveList(){
+    public void navigateToLeaveList() {
+
+        WebDriverWait wait =
+                new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+        wait.until(
+                ExpectedConditions.elementToBeClickable(btnLeave)
+        );
         btnLeave.click();
+        wait.until(
+                ExpectedConditions.urlContains("leave")
+        );
     }
 
-    public void selectDropdownOption(WebDriver driver, WebElement dropdownContainer, String optionText) {
+    public void selectDropdownOption(
+            WebDriver driver,
+            WebElement dropdownContainer,
+            String optionText) {
+        WebDriverWait wait =
+                new WebDriverWait(driver,
+                        Duration.ofSeconds(10));
+        wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        dropdownContainer
+                )
+        );
         dropdownContainer.click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        By optionLocator = By.xpath("//div[@role='listbox']//div[@role='option' and .//*[text()='" + optionText + "']] | //div[@role='listbox']//div[@role='option'][normalize-space()='" + optionText + "']");
-        WebElement option = wait.until(ExpectedConditions.elementToBeClickable(optionLocator));
+
+        By optionLocator = By.xpath(
+                "//div[@role='option'][normalize-space()='" +
+                        optionText +
+                        "']"
+        );
+        WebElement option =
+                wait.until(
+                        ExpectedConditions.elementToBeClickable(
+                                optionLocator
+                        )
+                );
         option.click();
     }
 
@@ -123,4 +155,27 @@ public class LeavePage extends ObjectPage.LoginPage {
     public List<WebElement> obtenerBotonesQuitarEstados() {
         return btnQuitarEstadosPredeterminados;
     }
+    public List<WebElement> obtenerCeldasLeaveStatusColumn() {
+        return celdasLeaveStatus;
+    }
+
+    public void limpiarFiltros() {
+
+        try {
+            WebDriverWait wait =
+                    new WebDriverWait(getDriver(),
+                            Duration.ofSeconds(5));
+            wait.until(
+                    ExpectedConditions.elementToBeClickable(btnReset)
+            );
+            btnReset.click();
+        } catch (Exception e) {
+            System.out.println(
+                    "No fue necesario limpiar filtros."
+            );
+        }
+    }
+
+
+
 }
