@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
         glue = {"StepDefinition"},
         plugin = {"pretty", "html:target/cucumber-report.html"},
         monochrome = true,
-        tags = "@Test-03"
+        tags = "@search_by_leave_status"
 )
 
 public class Runner {

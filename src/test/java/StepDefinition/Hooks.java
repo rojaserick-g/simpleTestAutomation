@@ -1,7 +1,6 @@
 package StepDefinition;
 
 import Constant.Constant;
-import Constant.Navegador;
 import Control.DriverContext;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
@@ -23,8 +22,6 @@ public class Hooks {
         this.scenario = scenario;
         Constant.scenarioStep = scenario;
         Constant.build_name = "Nombre de Proyecto";
-        // Initialize WebDriver before running tests
-        DriverContext.setUp(Navegador.Chrome, "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
     }
 
     @After
@@ -33,17 +30,38 @@ public class Hooks {
     }
 
     public void generarEvidencia(String imageRefName){
-        if (DriverContext.getDriver() != null) {
-            byte[] screenShot = ((TakesScreenshot) DriverContext.getDriver()).getScreenshotAs(OutputType.BYTES);
-            this.scenario.attach(screenShot,"image/png", imageRefName);
+
+        if (DriverContext.getDriver() == null) {
+
+            System.out.println(
+                    "Driver no inicializado."
+            );
+
+            return;
         }
+
+        byte[] screenShot =
+                ((TakesScreenshot)
+                        DriverContext.getDriver())
+                        .getScreenshotAs(
+                                OutputType.BYTES);
+        this.scenario.attach(
+                screenShot,
+                "image/png",
+                imageRefName
+        );
     }
 
     @AfterStep
     public void capturaEvidencia(){
+
+        if (DriverContext.getDriver() == null) {
+            return;
+        }
         if(this.scenario.isFailed()){
             generarEvidencia("[FAIL] Step ScreenShots");
-        }else if(Hooks.tomarCapturaPantalla.equalsIgnoreCase("fullEvidence")){
+        } else if(Hooks.tomarCapturaPantalla
+                .equalsIgnoreCase("fullEvidence")){
             generarEvidencia("[SUCCESS] Step ScreenShots");
         }
     }

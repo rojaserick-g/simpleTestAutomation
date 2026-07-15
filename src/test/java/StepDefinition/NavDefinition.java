@@ -8,16 +8,29 @@ import org.junit.Assert;
 
 public class NavDefinition {
 
-    @Given("abrir el navegador en la url {string}")
-    public void abrirNavegador(String url) throws InterruptedException {
+    @Given("open the browser and navigate to {string}")
+    public void openTheBrowserAndNavigateTo(String url)
+            throws InterruptedException {
+        String nav =
+                System.getProperty("nav", "default");
 
-        String nav = System.getProperty("nav", "default");
-        Navegador navegador = NavSelector.seleccionNavegador(nav);
-        DriverContext.setUp(navegador, url);
+        Navegador navegador =
+                NavSelector.seleccionNavegador(nav);
+        DriverContext.setUp(
+                navegador,
+                url
+        );
         Thread.sleep(5000);
-        String urlActual = DriverContext.getDriver().getCurrentUrl();
-        System.out.println("URL Actual: "+ urlActual);
-        Assert.assertEquals(urlActual,url);
-
+        String urlActual =
+                DriverContext.getDriver()
+                        .getCurrentUrl();
+        System.out.println(
+                "URL Actual: "
+                        + urlActual
+        );
+        Assert.assertEquals(
+                url,
+                urlActual
+        );
     }
 }
