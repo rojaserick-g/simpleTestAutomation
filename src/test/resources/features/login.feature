@@ -14,8 +14,9 @@ Feature: funcionalidad de login
 
 
     Examples:
-        | usuario | pass |
-        | Admin   | admin123 |
+      | usuario | pass |
+      | Admin   | admin123 |
+
 
 
 
