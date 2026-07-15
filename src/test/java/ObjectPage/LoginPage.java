@@ -1,6 +1,6 @@
 package ObjectPage;
 
-import org.junit.jupiter.api.Assertions;
+import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -12,17 +12,14 @@ public class LoginPage extends BaseController {
         initPage();
     }
 
-    @FindBy(id = "username")
+    @FindBy(name = "username")
     private WebElement nombreUsuario;
 
-    @FindBy(css = "input[name='password']")
+    @FindBy(name = "password")
     private WebElement passwordUsuario;
 
-    @FindBy(xpath = "//button[contains(text(),'Submit')]")
-    private WebElement btnSubmit;
-
-    @FindBy(xpath = "//*[text() = 'Your username is invalid!']")
-    private WebElement msgUsuarioInvalido;
+    @FindBy(css = ".orangehrm-login-button")
+    private WebElement btnLogin;
 
 
     public void escribirUsersname(String nUsuario) {
@@ -31,10 +28,10 @@ public class LoginPage extends BaseController {
                 this.nombreUsuario.clear();
                 this.nombreUsuario.sendKeys(nUsuario);
             } else {
-                Assertions.fail("No se encuentra el campo Nombre de Usuario en la página");
+                Assert.fail("No se encuentra el campo Nombre de Usuario en la página");
             }
         } catch (Exception e) {
-            Assertions.fail("Error al escribir en el campo de usuario: " + e.getMessage());
+            Assert.fail("Error al escribir en el campo de usuario: " + e.getMessage());
         }
     }
 
@@ -43,28 +40,15 @@ public class LoginPage extends BaseController {
             this.passwordUsuario.clear();
             this.passwordUsuario.sendKeys(pass);
         } catch (Exception e) {
-            Assertions.fail("Error al escribir en el campo de password: " + e.getMessage());
+            Assert.fail("Error al escribir en el campo de password: " + e.getMessage());
         }
     }
 
-    public void clickBtnSubmit() {
+    public void clickBtnLogin() {
         try {
-            this.btnSubmit.click();
+            this.btnLogin.click();
         } catch (Exception e) {
-            Assertions.fail("Error al hacer click en el botón Submit: " + e.getMessage());
+            Assert.fail("Error al hacer click en el botón Submit: " + e.getMessage());
         }
     }
-
-    public void validarMsgUsuarioInvalido(){
-        try {
-            if(this.msgUsuarioInvalido.isDisplayed()){
-                System.out.println("Mensaje de usuario inválido visible");
-            }else{
-                System.out.println("Error al visualizar el mensaje de usuario inválido!");
-            }
-        }catch(Exception e){
-            Assertions.fail("Error al detectar el mensaje de usuario inválido: "+e.getMessage());
-        }
-    }
-
 }
