@@ -14,7 +14,6 @@ Feature: Employee List Search and Filters
     And clicks Search
     Then search results should be displayed
     And every result should contain "<expectedName>"
-
     Examples:
       | employeeName | expectedName |
       | Amelia       | Amelia       |
@@ -23,12 +22,12 @@ Feature: Employee List Search and Filters
   Scenario Outline: Search employee name ignoring case sensitivity
     When the user searches employee "<employeeName>"
     Then the results should be identical for the same employee "<expectedName>"
-
     Examples:
       | employeeName | expectedName |
       | Amelia       | Amelia       |
       | AMELIA       | Amelia       |
       | aMeLiA       | Amelia       |
+
   @TC-003
  Scenario Outline: Search employee by employee id
     When the user enters employee id "<employeeId>"
@@ -44,7 +43,6 @@ Feature: Employee List Search and Filters
     When the user selects employment status "<status>"
     And clicks Search
     Then every result should have employment status "<status>"
-
     Examples:
       | status                |
       | Freelance             |
@@ -58,7 +56,6 @@ Feature: Employee List Search and Filters
     When the user selects include option "<includeOption>"
     And clicks Search
     Then results should belong to "<includeOption>"
-
     Examples:
       | includeOption              |
       | Current Employees Only     |
@@ -70,7 +67,6 @@ Feature: Employee List Search and Filters
     When the user selects job title "<jobTitle>"
     And clicks Search
     Then every result should have job title "<jobTitle>"
-
     Examples:
       | jobTitle                 |
       | Account Assistant        |
@@ -82,7 +78,6 @@ Feature: Employee List Search and Filters
     When the user selects sub unit "<subUnit>"
     And clicks Search
     Then every result should belong to sub unit "<subUnit>"
-
     Examples:
       | subUnit           |
       | OrangeHRM Inc.    |
@@ -90,6 +85,7 @@ Feature: Employee List Search and Filters
       | Engineering       |
       | Development       |
       | Quality Assurance |
+
 
   @PIM @TC-008
   Scenario Outline: Search employees by supervisor
@@ -102,6 +98,7 @@ Feature: Employee List Search and Filters
       | Peter Anderson   |
       | Linda Brown      |
 
+
   @PIM @TC-009
   Scenario Outline: Search employee with multiple filters
     When the user enters employee name "<employeeName>"
@@ -110,7 +107,6 @@ Feature: Employee List Search and Filters
     And selects sub unit "<subUnit>"
     And clicks Search
     Then every result should match all selected criteria
-
     Examples:
       | employeeName | status | jobTitle | subUnit |
       | James        |        |          |          |
@@ -123,30 +119,24 @@ Feature: Employee List Search and Filters
     When the user clicks Reset
     Then all search fields should be cleared
     And default values should be restored
-
     Examples:
       | employeeName | status              |
       | James        | Freelance           |
       | Amelia       | Full-Time Contract  |
 
   #@PIM @TC-011
-  #Scenario Outline: Validate employee information from list and detail page
-   # When the user opens employee "<employeeName>" from the search results
-    #Then employee detail page should display:
-     # | field | value |
-     # | Name  | <employeeName> |
-     # | Id    | <employeeId> |
-
-    #Examples:
-     # | employeeName | employeeId |
-      #| James        | 0365 |
+  #Scenario: Validate created employee information
+    #Given a new employee is created with:
+      #| firstName | lastName |
+      #| Erick     | Rojas    |
+    #When the user opens the created employee
+    #Then employee detail page should display
 
   @PIM @TC-012
   Scenario Outline: Navigate through employee list pages
     When the user navigates to page "<pageNumber>"
     Then page "<pageNumber>" should be displayed
     And employee records should be loaded
-
     Examples:
       | pageNumber |
       | 1 |
@@ -159,7 +149,6 @@ Feature: Employee List Search and Filters
     And clicks Search
     Then no script should be executed
     And the application should remain stable
-
     Examples:
       | maliciousInput               |
       | <script>alert('xss')</script> |
@@ -171,7 +160,6 @@ Feature: Employee List Search and Filters
     And clicks Search
     Then unauthorized records should not be returned
     And the application should remain stable
-
     Examples:
       | maliciousInput              |
       | ' OR 1=1 --                 |
@@ -180,16 +168,30 @@ Feature: Employee List Search and Filters
 
   @PIM @TC-015
   Scenario Outline: Create and find employee
-
     Given a new employee is created with:
       | firstName | lastName |
       | <firstName> | <lastName> |
-
     When the user searches using generated employee id
-
     Then the created employee should be displayed
-
     Examples:
-
       | firstName | lastName |
       | Leslie    | Prueba   |
+
+  @PIM @TC-016
+  Scenario Outline: Delete employee and validate removal
+    Given employee "<employeeId>" exists
+    When the employee is deleted
+    And searches by employee id "<employeeId>"
+    Then no records should be found
+    Examples:
+      | employeeId |
+      | 0460 |
+
+  @PIM @TC-017
+  Scenario: Delete employee and validate removal
+    Given a new employee is created with:
+      | firstName | lastName |
+      | Erick     | Rojas    |
+    When the employee is deleted
+    And the user searches using generated employee id
+    Then no records should be found
