@@ -30,15 +30,38 @@ public class Hooks {
     }
 
     public void generarEvidencia(String imageRefName){
-        byte[] screenShot = ((TakesScreenshot) DriverContext.getDriver()).getScreenshotAs(OutputType.BYTES);
-        this.scenario.attach(screenShot,"image/png", imageRefName);
+
+        if (DriverContext.getDriver() == null) {
+
+            System.out.println(
+                    "Driver no inicializado."
+            );
+
+            return;
+        }
+
+        byte[] screenShot =
+                ((TakesScreenshot)
+                        DriverContext.getDriver())
+                        .getScreenshotAs(
+                                OutputType.BYTES);
+        this.scenario.attach(
+                screenShot,
+                "image/png",
+                imageRefName
+        );
     }
 
     @AfterStep
     public void capturaEvidencia(){
+
+        if (DriverContext.getDriver() == null) {
+            return;
+        }
         if(this.scenario.isFailed()){
             generarEvidencia("[FAIL] Step ScreenShots");
-        }else if(Hooks.tomarCapturaPantalla.equalsIgnoreCase("fullEvidence")){
+        } else if(Hooks.tomarCapturaPantalla
+                .equalsIgnoreCase("fullEvidence")){
             generarEvidencia("[SUCCESS] Step ScreenShots");
         }
     }

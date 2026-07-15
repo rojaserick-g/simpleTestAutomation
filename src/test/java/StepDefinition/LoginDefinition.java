@@ -39,6 +39,7 @@ public class LoginDefinition {
     @Then("se valida el mensaje de pass invalido")
     public void seValidaElMensajeDePassInvalido() {
         loginPage.validarMsgPasswordInvalido();
+
     }
 
 }

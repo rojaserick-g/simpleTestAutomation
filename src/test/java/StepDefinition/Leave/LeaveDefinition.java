@@ -12,14 +12,19 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
+
+import static ObjectPage.LoginPage.driver;
 
 public class LeaveDefinition {
 
     private final LoginPage loginPage = new LoginPage();
     private final LeavePage leavePage = new LeavePage();
 
+
     @Given("the user is logged into OrangeHRM with user {string} and password {string}")
     public void theUserIsLoggedIntoOrangeHRM(String usuario, String pass) {
+
         loginPage.escribirUsersname(usuario);
         loginPage.escribirPassword(pass);
         loginPage.clickBtnLogin();
@@ -41,87 +46,256 @@ public class LeaveDefinition {
         leavePage.navigateToLeaveList();
     }
 
-    @When("ingresa la fecha desde {string}")
-    public void ingresaLaFechaDesde(String fechaDesde) {
+    @When("the user enters from date {string}")
+    public void theUserEntersFromDate(String fechaDesde) {
+
         WebDriver d = leavePage.getDriver();
-        WebDriverWait wait = new WebDriverWait(d, Duration.ofSeconds(10));
-        WebElement txtFechaDesde = leavePage.txtFechaDesde;
-        wait.until(ExpectedConditions.visibilityOf(txtFechaDesde));
+        WebDriverWait wait =
+                new WebDriverWait(d, Duration.ofSeconds(10));
+        WebElement txtFechaDesde =
+                leavePage.txtFechaDesde;
+        wait.until(
+                ExpectedConditions.visibilityOf(txtFechaDesde)
+        );
         txtFechaDesde.clear();
         txtFechaDesde.sendKeys(fechaDesde);
     }
 
-    @And("ingresa la fecha hasta {string}")
-    public void ingresaLaFechaHasta(String toDate) {
+    @And("the user enters to date {string}")
+    public void theUserEntersToDate(String toDate) {
+
         WebDriver d = leavePage.getDriver();
-        WebElement txtFechaHasta = leavePage.txtFechaHasta;
-        WebDriverWait wait = new WebDriverWait(d, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOf(txtFechaHasta));
+        WebElement txtFechaHasta =
+                leavePage.txtFechaHasta;
+        WebDriverWait wait =
+                new WebDriverWait(d, Duration.ofSeconds(10));
+        wait.until(
+                ExpectedConditions.visibilityOf(txtFechaHasta)
+        );
         txtFechaHasta.clear();
         txtFechaHasta.sendKeys(toDate);
     }
 
-    @And("selecciona el estado {string}")
-    public void seleccionaElEstado(String estado) {
-        // Corregido: Usa cbxShowLeaveStatus en lugar de getDropdownStatusContainer que no existía
-        leavePage.selectDropdownOption(leavePage.getDriver(), leavePage.cbxShowLeaveStatus, estado);
-    }
 
-    @And("selecciona el tipo de licencia {string}")
-    public void seleccionaElTipoDeLicencia(String leaveType) {
-        // Corregido: Agregado el parámetro driver
-        leavePage.selectDropdownOption(leavePage.getDriver(), leavePage.cbxLeavelType, leaveType);
-    }
 
-    @And("ingresa el nombre del empleado {string}")
-    public void ingresaElNombreDelEmpleado(String employeeName) {
+    @And("the user enters employee name {string}")
+    public void theUserEntersEmployeeName(String employeeName) {
+        leavePage.txtEmployeeName.clear();
         leavePage.txtEmployeeName.sendKeys(employeeName);
     }
 
-    @And("selecciona la sub unidad {string}")
-    public void seleccionaLaSubUnidad(String subUnit) {
-        // Corregido: Agregado el parámetro driver
-        leavePage.selectDropdownOption(leavePage.getDriver(), leavePage.cbxSubUnit, subUnit);
-    }
 
-    @And("hace clic en el boton buscar")
-    public void haceClicEnElBotonBuscar() {
-        leavePage.btnPastEmployees.click();
-        leavePage.btnSearch.click();
+    @Then("the system should display records for {string}")
+    public void theSystemShouldDisplayRecordsFor(String employeeName) {
+        System.out.println(
+                "Validating records for employee: "
+                        + employeeName
+        );
     }
-
-    @Then("el sistema deberia mostrar los registros de {string}")
-    public void elSistemaDeberiaMostrarLosRegistrosDe(String employeeName) {
-        System.out.println("Validando resultados en pantalla para el empleado: " + employeeName);
-    }
-
+    //test2
     @When("the user types {string} in Employee Name field")
     public void theUserTypesInEmployeeNameField(String partialName) {
-        WebDriver d = leavePage.getDriver();
-        WebDriverWait wait = new WebDriverWait(d, Duration.ofSeconds(10));
-        WebElement inputEmpleado = wait.until(ExpectedConditions.visibilityOf(leavePage.getTxtEmployeeName()));
-
-        inputEmpleado.clear();
-        inputEmpleado.sendKeys(partialName);
-
-        // NUEVO: Forzar al test a esperar que el dropdown aparezca
-        // ANTES de que termine el paso y Cucumber tome la captura.
-        try {
-            wait.until(ExpectedConditions.visibilityOf(leavePage.getAutocompleteDropdown()));
-            Thread.sleep(500); // Un leve respiro para que el DOM termine de renderizar las opciones
-        } catch (Exception e) {
-            // Si no aparece de inmediato, dejamos que continúe para que el siguiente paso maneje la aserción
-        }
+        leavePage.getTxtEmployeeName().clear();
+        leavePage.getTxtEmployeeName().sendKeys(partialName);
     }
 
     @Then("employee suggestions should be displayed")
     public void employeeSuggestionsShouldBeDisplayed() {
-        WebDriver d = leavePage.getDriver();
-        WebDriverWait wait = new WebDriverWait(d, Duration.ofSeconds(10));
-        WebElement dropdownSugerencias = wait.until(ExpectedConditions.visibilityOf(leavePage.getAutocompleteDropdown()));
-        boolean tieneOpciones = dropdownSugerencias.findElements(By.xpath("./div")).size() > 0;
-
-        assert tieneOpciones : "¡Error! El autocompletado se abrió pero no mostró ninguna sugerencia.";
-        System.out.println("Sugerencias desplegadas correctamente en pantalla.");
+        WebDriver driver = leavePage.getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(leavePage.getAutocompleteDropdown()));
+        List<WebElement> suggestions = leavePage.getAutocompleteDropdown().findElements(By.tagName("li"));
+        if (suggestions.isEmpty()) {
+            throw new AssertionError("No employee suggestions displayed.");
+        } else {
+            System.out.println("Employee suggestions displayed: " + suggestions.size());
+        }
     }
+        //test 3
+// =====================================================
+// TEST 3 - SEARCH BY SUB UNIT
+// =====================================================
+
+    @When("the user selects sub unit {string}")
+    public void theUserSelectsSubUnit(String subUnit) {
+
+        WebDriver d = leavePage.getDriver();
+        WebDriverWait wait =
+                new WebDriverWait(d, Duration.ofSeconds(10));
+        wait.until(
+                ExpectedConditions.visibilityOf(
+                        leavePage.cbxSubUnit
+                )
+        );
+        leavePage.selectDropdownOption(
+                d,
+                leavePage.cbxSubUnit,
+                subUnit
+        );
+    }
+
+    @Then("all returned requests should belong to {string}")
+    public void allReturnedRequestsShouldBelongTo(String subUnitEsperada) {
+        List<WebElement> celdas =
+                leavePage.obtenerCeldasSubUnit();
+        if (celdas.isEmpty()) {
+            System.out.println(
+                    "No records found for sub unit: "
+                            + subUnitEsperada
+            );
+            return;
+        }
+        for (WebElement celda : celdas) {
+
+            String textoCelda =
+                    celda.getText().trim();
+            assert textoCelda.equals(subUnitEsperada)
+                    : "Expected sub unit: "
+                    + subUnitEsperada
+                    + " but found: "
+                    + textoCelda;
+        }
+        System.out.println(
+                "All returned records belong to: "
+                        + subUnitEsperada
+        );
+    }
+
+
+// =====================================================
+// TEST 4 - SEARCH BY LEAVE TYPE
+// =====================================================
+@When("the user selects leave type {string}")
+public void theUserSelectsLeaveType(String leaveType) {
+    WebDriver d = leavePage.getDriver();
+    WebDriverWait wait =
+            new WebDriverWait(
+                    d,
+                    Duration.ofSeconds(10));
+    wait.until(
+            ExpectedConditions.visibilityOf(
+                    leavePage.cbxLeaveType
+            )
+    );
+    leavePage.selectDropdownOption(
+            d,
+            leavePage.cbxLeaveType,
+            leaveType
+    );
+}
+
+    @Then("all leave records should have leave type {string}")
+    public void allLeaveRecordsShouldHaveLeaveType(
+            String leaveTypeEsperado) {
+        List<WebElement> celdas =
+                leavePage.obtenerCeldasLeaveType();
+        if (celdas.isEmpty()) {
+
+            System.out.println(
+                    "No records found for leave type: "
+                            + leaveTypeEsperado
+            );
+            return;
+        }
+        for (WebElement celda : celdas) {
+
+            String textoCelda =
+                    celda.getText().trim();
+            assert textoCelda.contains(leaveTypeEsperado)
+                    : "Expected leave type: "
+                    + leaveTypeEsperado
+                    + " but found: "
+                    + textoCelda;
+        }
+        System.out.println(
+                "All leave records match leave type: "
+                        + leaveTypeEsperado
+        );
+    }
+
+
+// =====================================================
+// TEST 5 - SEARCH BY LEAVE STATUS
+// =====================================================
+
+    @When("the user selects leave status {string}")
+    public void theUserSelectsLeaveStatus(String status) {
+
+        WebDriver d = leavePage.getDriver();
+
+        WebDriverWait wait =
+                new WebDriverWait(d, Duration.ofSeconds(10));
+
+        wait.until(
+                ExpectedConditions.visibilityOf(
+                        leavePage.cbxShowLeaveStatus
+                )
+        );
+
+        leavePage.selectDropdownOption(
+                d,
+                leavePage.cbxShowLeaveStatus,
+                status
+        );
+    }
+
+    @Then("all returned requests should have status {string}")
+    public void allReturnedRequestsShouldHaveStatus(
+            String statusEsperado) {
+
+        List<WebElement> celdas =
+                leavePage.obtenerCeldasLeaveStatus();
+
+        if (celdas.isEmpty()) {
+
+            System.out.println(
+                    "No records found for status: "
+                            + statusEsperado
+            );
+
+            return;
+        }
+
+        for (WebElement celda : celdas) {
+
+            String textoCelda =
+                    celda.getText().trim();
+
+            assert textoCelda.contains(statusEsperado)
+                    : "Expected status: "
+                    + statusEsperado
+                    + " but found: "
+                    + textoCelda;
+        }
+
+        System.out.println(
+                "All returned requests have status: "
+                        + statusEsperado
+        );
+    }
+
+
+// =====================================================
+// COMMON SEARCH BUTTON
+// =====================================================
+
+    @And("the user clicks the Search button")
+    public void theUserClicksTheSearchButton() {
+
+        WebDriverWait wait =
+                new WebDriverWait(
+                        leavePage.getDriver(),
+                        Duration.ofSeconds(10));
+
+        wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        leavePage.btnSearch
+                )
+        );
+
+        leavePage.btnSearch.click();
+    }
+
+
+
 }
