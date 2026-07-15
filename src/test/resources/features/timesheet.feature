@@ -9,6 +9,7 @@ Feature: Employee Timesheet Management
     Given the user is logged into OrangeHRM
     And the user navigates to Employee Timesheets page
 
+  @Test-01
   Scenario Outline: Search timesheet by employee name
     When the user enters "<employeeName>" in Employee Name field
     And clicks View
@@ -20,6 +21,7 @@ Feature: Employee Timesheet Management
       | John Smith |
       | Paul Collings |
 
+  @Test-02
   Scenario Outline: Validate employee autocomplete suggestions
     When the user types "<partialName>" in Employee Name field
     Then employee suggestions containing "<partialName>" should be displayed
@@ -30,15 +32,17 @@ Feature: Employee Timesheet Management
       | Jo |
       | Pa |
 
+  @Test-03
   Scenario Outline: View employee timesheet for a specific period
     When the user searches employee "<employeeName>"
+    And the user clicks in view button
     And selects timesheet period "<period>"
     Then the system should display the timesheet for "<period>"
 
     Examples:
-      | employeeName | period |
-      | Linda Anderson | 2026-01-05 |
-      | John Smith | 2026-02-02 |
+      | employeeName   | period |
+      | Char           | 2026-01-05 |
+      | John Smith     | 2026-02-02 |
 
   Scenario Outline: View an existing timesheet
     Given employee "<employeeName>" has a timesheet for "<period>"
@@ -46,7 +50,7 @@ Feature: Employee Timesheet Management
     Then worked hours should be displayed
 
     Examples:
-      | employeeName | period |
+      | employeeName   | period |
       | Linda Anderson | 2026-01-05 |
 
   Scenario Outline: Validate behavior when timesheet does not exist
@@ -55,8 +59,8 @@ Feature: Employee Timesheet Management
     Then a no timesheet available message should be displayed
 
     Examples:
-      | employeeName | period |
-      | John Smith | 2030-01-01 |
+      | employeeName   | period |
+      | John Smith     | 2030-01-01 |
 
   Scenario Outline: Navigate to previous timesheet period
     Given employee "<employeeName>" timesheet is displayed

@@ -1,5 +1,6 @@
 package Control;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -36,8 +37,12 @@ public class DriverManager {
             default -> System.out.println("No es posible levantar el navegador " + nav);
         }
         if (this.driver != null) {
+<<<<<<< HEAD
             //this.driver.manage().window().maximize();
             this.driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920,1080));
+=======
+            this.driver.manage().window().setSize(new Dimension(1920, 1080));
+>>>>>>> 0cc21ef165a5e7665d67c7b05c7632cb25875553
             this.driver.get(url);
         }
     }
