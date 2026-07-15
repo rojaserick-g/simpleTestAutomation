@@ -17,7 +17,7 @@ public class PimDefinition {
         pimPage.ingresarModuloPim();
     }
 
-    @When("the user enters {string} in Employee Name field")
+    @When("the user enters {string} in PIM Employee Name field")
     public void theUserEntersInEmployeeNameField(String nombre) {
         pimPage.escribirNombreEmpleado(nombre);
     }
@@ -45,7 +45,7 @@ public class PimDefinition {
         pimPage.validarCantidadRegistros(cantidad);
     }
 
-    @When("the user searches employee {string}")
+    @When("the user searches PIM employee {string}")
     public void theUserSearchesEmployee(String nombre) {
         pimPage.escribirNombreEmpleado(nombre);
         pimPage.clickSearch();
@@ -96,7 +96,7 @@ public class PimDefinition {
     }
 
     @When("the user selects sub unit {string}")
-    public void theUserSelectsSubUnit(String subUnit) {
+    public void theUserSelectsSubUnit1(String subUnit) {
         pimPage.seleccionarSubUnit(subUnit);
 
     }
@@ -120,7 +120,7 @@ public class PimDefinition {
     }
 
     @When("the user enters employee name {string}")
-    public void theUserEntersEmployeeName(String employeeName) {
+    public void theUserEntersEmployeeName1(String employeeName) {
         pimPage.ingresarNombreEmpleado(employeeName);
 
     }

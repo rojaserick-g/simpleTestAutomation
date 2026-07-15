@@ -1,3 +1,4 @@
+@Leave
 Feature: Leave List Management
 
   As an HR administrator
@@ -15,8 +16,8 @@ Feature: Leave List Management
     And the user enters to date "<to_date>"
     And the user selects leave status "<status>"
     And the user selects leave type "<leave_type>"
-    And the user enters employee name "<employee_name>"
-    And the user selects sub unit "<sub_unit>"
+    And the user enters Leave employee name "<employee_name>"
+    And the user selects Leave sub unit "<sub_unit>"
     And the user clicks the Search button
     Then the system should display records for "<employee_name>"
 
@@ -28,7 +29,7 @@ Feature: Leave List Management
 
   @validate_autocomplete @test-02
   Scenario Outline: Validate employee autocomplete suggestions
-    When the user types "<partialName>" in Employee Name field
+    When the user types "<partialName>" in Leave Employee Name field
     Then employee suggestions should be displayed
 
     Examples:

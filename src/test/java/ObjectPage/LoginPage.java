@@ -1,6 +1,7 @@
 package ObjectPage;
 
-import org.junit.jupiter.api.Assertions;
+
+import org.junit.Assert;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -37,10 +38,10 @@ public class LoginPage extends BaseController {
                 this.nombreUsuario.clear();
                 this.nombreUsuario.sendKeys(nUsuario);
             } else {
-                Assertions.fail("No se encuentra el campo Nombre de Usuario en la página");
+                Assert.fail("No se encuentra el campo Nombre de Usuario en la página");
             }
         } catch (Exception e) {
-            Assertions.fail("Error al escribir en el campo de usuario: " + e.getMessage());
+            Assert.fail("Error al escribir en el campo de usuario: " + e.getMessage());
         }
     }
 
@@ -49,7 +50,7 @@ public class LoginPage extends BaseController {
             this.passwordUsuario.clear();
             this.passwordUsuario.sendKeys(pass);
         } catch (Exception e) {
-            Assertions.fail("Error al escribir en el campo de password: " + e.getMessage());
+            Assert.fail("Error al escribir en el campo de password: " + e.getMessage());
         }
     }
 
@@ -57,7 +58,7 @@ public class LoginPage extends BaseController {
         try {
             this.btnLogin.click();
         } catch (Exception e) {
-            Assertions.fail("Error al hacer click en el botón Login: " + e.getMessage());
+            Assert.fail("Error al hacer click en el botón Login: " + e.getMessage());
         }
     }
 
@@ -69,7 +70,7 @@ public class LoginPage extends BaseController {
                 System.out.println("Error al visualizar el mensaje de usuario inválido!");
             }
         }catch(Exception e){
-            Assertions.fail("Error al detectar el mensaje de usuario inválido: "+e.getMessage());
+            Assert.fail("Error al detectar el mensaje de usuario inválido: "+e.getMessage());
         }
     }
 
@@ -82,7 +83,7 @@ public class LoginPage extends BaseController {
                 System.out.println("Error al visualizar el mensaje de password inválido!");
             }
         }catch(Exception e){
-            Assertions.fail("Error al detectar el mensaje de usuario inválido: "+e.getMessage());
+            Assert.fail("Error al detectar el mensaje de usuario inválido: "+e.getMessage());
         }
     }
 

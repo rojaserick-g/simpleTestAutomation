@@ -1,6 +1,6 @@
 package ObjectPage;
 import Control.BaseController;
-import org.junit.jupiter.api.Assertions;
+import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import java.util.List;
@@ -93,7 +93,7 @@ public class PimPage extends BaseController {
             visualizarElemento(menuPim, 10);
             menuPim.click();
         } catch (Exception e) {
-            Assertions.fail("Error al ingresar al módulo PIM: " + e.getMessage());
+            Assert.fail("Error al ingresar al módulo PIM: " + e.getMessage());
         }
     }
 
@@ -103,7 +103,7 @@ public class PimPage extends BaseController {
             txtEmployeeName.clear();
             txtEmployeeName.sendKeys(nombre);
         } catch (Exception e) {
-            Assertions.fail("Error al ingresar nombre: " + e.getMessage());
+            Assert.fail("Error al ingresar nombre: " + e.getMessage());
         }
     }
 
@@ -113,7 +113,7 @@ public class PimPage extends BaseController {
             txtEmployeeId.clear();
             txtEmployeeId.sendKeys(id);
         } catch (Exception e) {
-            Assertions.fail("Error al ingresar employee id: " + e.getMessage());
+            Assert.fail("Error al ingresar employee id: " + e.getMessage());
         }
     }
 
@@ -122,7 +122,7 @@ public class PimPage extends BaseController {
             visualizarElemento(btnSearch, 10);
             btnSearch.click();
         } catch (Exception e) {
-            Assertions.fail("Error al presionar Search: " + e.getMessage());
+            Assert.fail("Error al presionar Search: " + e.getMessage());
         }
     }
 
@@ -142,7 +142,7 @@ public class PimPage extends BaseController {
 
         } catch (Exception e) {
 
-            Assertions.fail("Error seleccionando Employment Status: " + e.getMessage());
+            Assert.fail("Error seleccionando Employment Status: " + e.getMessage());
         }
     }
 
@@ -159,7 +159,7 @@ public class PimPage extends BaseController {
             }
 
         } catch (Exception e) {
-            Assertions.fail("Error seleccionando Include: " + e.getMessage());
+            Assert.fail("Error seleccionando Include: " + e.getMessage());
         }
     }
 
@@ -176,7 +176,7 @@ public class PimPage extends BaseController {
             }
 
         } catch (Exception e) {
-            Assertions.fail("Error seleccionando Job Title: " + e.getMessage());
+            Assert.fail("Error seleccionando Job Title: " + e.getMessage());
         }
     }
 
@@ -192,7 +192,7 @@ public class PimPage extends BaseController {
                 }
             }
         } catch (Exception e) {
-            Assertions.fail("Error seleccionando Sub Unit: " + e.getMessage());
+            Assert.fail("Error seleccionando Sub Unit: " + e.getMessage());
         }
     }
 
@@ -202,24 +202,24 @@ public class PimPage extends BaseController {
             js.executeScript("window.scrollBy(0,700)");
             Thread.sleep(1000);
         } catch (Exception e) {
-            Assertions.fail("Error al hacer scroll: " + e.getMessage());
+            Assert.fail("Error al hacer scroll: " + e.getMessage());
         }
     }
 
     public void validarResultadosVisibles() {
         try {
             visualizarElemento(tablaResultados, 10);
-            Assertions.assertTrue(tablaResultados.isDisplayed(),
-                    "La tabla de resultados no se muestra.");
+            Assert.assertTrue("La tabla de resultados no se muestra.",
+                    tablaResultados.isDisplayed()
+            );
         } catch (Exception e) {
-            Assertions.fail("Error al validar la tabla: " + e.getMessage());
+            Assert.fail("Error al validar la tabla: " + e.getMessage());
         }
     }
 
     public void validarNombreEmpleado(String nombreEsperado) {
         try {
-            Assertions.assertFalse(filasResultados.isEmpty(),
-                    "La búsqueda no retornó resultados.");
+            Assert.assertFalse("La búsqueda no retornó resultados.", filasResultados.isEmpty());
             boolean encontrado = false;
             for (WebElement fila : filasResultados) {
                 String texto = fila.getText();
@@ -229,11 +229,10 @@ public class PimPage extends BaseController {
                     break;
                 }
             }
-            Assertions.assertTrue(encontrado,
-                    "No se encontró el empleado: " + nombreEsperado);
+            Assert.assertTrue("No se encontró el empleado: " + nombreEsperado, encontrado);
 
         } catch (Exception e) {
-            Assertions.fail(e.getMessage());
+            Assert.fail(e.getMessage());
 
         }
     }
@@ -242,10 +241,7 @@ public class PimPage extends BaseController {
         try {
             bajarHastaResultados();
             if (cantidadEsperada.equals("1")) {
-                Assertions.assertFalse(
-                        registrosEncontrados.isEmpty(),
-                        "Se esperaba un registro y no se encontró ninguno."
-                );
+                Assert.assertFalse("Se esperaba un registro y no se encontró ninguno.", registrosEncontrados.isEmpty());
                 System.out.println("Se encontró un registro correctamente.");
             } else {
                 WebDriverWait wait = new WebDriverWait(
@@ -254,14 +250,11 @@ public class PimPage extends BaseController {
                 );
 
                 wait.until(ExpectedConditions.visibilityOf(lblNoRecords));
-                Assertions.assertTrue(
-                        lblNoRecords.isDisplayed(),
-                        "Se esperaba el mensaje 'No Records Found'."
-                );
+                Assert.assertTrue("Se esperaba el mensaje 'No Records Found'.", lblNoRecords.isDisplayed());
                 System.out.println("No se encontraron registros, validación correcta.");
             }
         } catch (Exception e) {
-            Assertions.fail("Error validando cantidad de registros: " + e.getMessage());
+            Assert.fail("Error validando cantidad de registros: " + e.getMessage());
         }
     }
 
@@ -278,7 +271,7 @@ public class PimPage extends BaseController {
                 }
             }
         } catch (Exception e) {
-            Assertions.fail("Error seleccionando Supervisor: " + e.getMessage());
+            Assert.fail("Error seleccionando Supervisor: " + e.getMessage());
         }
     }
 
@@ -290,15 +283,11 @@ public class PimPage extends BaseController {
     public void validarResultadosFiltros() {
         try {
             visualizarElemento(tablaResultados, 10);
-            Assertions.assertTrue(
-                    tablaResultados.isDisplayed(),
-                    "La tabla de resultados no se muestra.");
+            Assert.assertTrue("La tabla de resultados no se muestra.", tablaResultados.isDisplayed());
 
-            Assertions.assertFalse(
-                    registrosEncontrados.isEmpty(),
-                    "No se encontraron registros.");
+            Assert.assertFalse("No se encontraron registros.", registrosEncontrados.isEmpty());
         } catch (Exception e) {
-            Assertions.fail("Error validando resultados: " + e.getMessage());
+            Assert.fail("Error validando resultados: " + e.getMessage());
         }
     }
 
@@ -307,7 +296,7 @@ public class PimPage extends BaseController {
             visualizarElemento(btnReset, 10);
             btnReset.click();
         } catch (Exception e) {
-            Assertions.fail("Error al presionar Reset: " + e.getMessage());
+            Assert.fail("Error al presionar Reset: " + e.getMessage());
 
         }
 
@@ -315,10 +304,10 @@ public class PimPage extends BaseController {
 
     public void validarCamposReseteados() {
         try {
-            Assertions.assertEquals("", txtEmployeeName.getAttribute("value"));
-            Assertions.assertEquals("", txtEmployeeId.getAttribute("value"));
+            Assert.assertEquals("", txtEmployeeName.getAttribute("value"));
+            Assert.assertEquals("", txtEmployeeId.getAttribute("value"));
         } catch (Exception e) {
-            Assertions.fail("Error validando campos reseteados: " + e.getMessage());
+            Assert.fail("Error validando campos reseteados: " + e.getMessage());
 
         }
     }
@@ -328,7 +317,7 @@ public class PimPage extends BaseController {
             visualizarElemento(btnEditar, 10);
             btnEditar.click();
         } catch (Exception e) {
-            Assertions.fail("Error al abrir el detalle del empleado: " + e.getMessage());
+            Assert.fail("Error al abrir el detalle del empleado: " + e.getMessage());
 
         }
     }
@@ -336,14 +325,14 @@ public class PimPage extends BaseController {
     public void validarDetalleEmpleado(String nombre, String id) {
         try {
             visualizarElemento(txtFirstNameDetalle, 10);
-            Assertions.assertEquals(
+            Assert.assertEquals(
                     nombre,
                     txtFirstNameDetalle.getAttribute("value"));
-            Assertions.assertEquals(
+            Assert.assertEquals(
                     id,
                     txtEmployeeIdDetalle.getAttribute("value"));
         } catch (Exception e) {
-            Assertions.fail("Error validando detalle del empleado: " + e.getMessage());
+            Assert.fail("Error validando detalle del empleado: " + e.getMessage());
         }
     }
 
@@ -351,7 +340,7 @@ public class PimPage extends BaseController {
     public void navegarPagina(String pagina) {
         try {
         } catch (Exception e) {
-            Assertions.fail("Error navegando: " + e.getMessage());
+            Assert.fail("Error navegando: " + e.getMessage());
         }
     }
 
@@ -359,11 +348,9 @@ public class PimPage extends BaseController {
     public void validarPagina(String pagina) {
         try {
             visualizarElemento(tablaResultados, 10);
-            Assertions.assertTrue(
-                    tablaResultados.isDisplayed(),
-                    "La tabla no se muestra.");
+            Assert.assertTrue("La tabla no se muestra.", tablaResultados.isDisplayed());
         } catch (Exception e) {
-            Assertions.fail("Error validando página: " + e.getMessage());
+            Assert.fail("Error validando página: " + e.getMessage());
 
         }
 
@@ -372,11 +359,9 @@ public class PimPage extends BaseController {
     // validar registro
     public void validarRegistrosPagina() {
         try {
-            Assertions.assertFalse(
-                    registrosEncontrados.isEmpty(),
-                    "No existen registros en la página.");
+            Assert.assertFalse("No existen registros en la página.", registrosEncontrados.isEmpty());
         } catch (Exception e) {
-            Assertions.fail("Error validando registros: " + e.getMessage());
+            Assert.fail("Error validando registros: " + e.getMessage());
 
         }
     }
@@ -384,12 +369,10 @@ public class PimPage extends BaseController {
     public void validarNoEjecucionScript() {
         try {
             visualizarElemento(tablaResultados, 10);
-            Assertions.assertTrue(
-                    tablaResultados.isDisplayed(),
-                    "La aplicación ejecutó un script o dejó de responder.");
+            Assert.assertTrue("La aplicación ejecutó un script o dejó de responder.", tablaResultados.isDisplayed());
 
         } catch (Exception e) {
-            Assertions.fail("Error validando protección XSS: " + e.getMessage());
+            Assert.fail("Error validando protección XSS: " + e.getMessage());
 
         }
 
@@ -397,23 +380,19 @@ public class PimPage extends BaseController {
 
     public void validarAplicacionEstable() {
         try {
-            Assertions.assertTrue(
-                    DriverContext.getDriver().getCurrentUrl().contains("pim"),
-                    "La aplicación salió del módulo PIM.");
+            Assert.assertTrue("La aplicación salió del módulo PIM.", DriverContext.getDriver().getCurrentUrl().contains("pim"));
 
         } catch (Exception e) {
-            Assertions.fail("La aplicación no permanece estable: " + e.getMessage());
+            Assert.fail("La aplicación no permanece estable: " + e.getMessage());
         }
     }
 
     public void validarSQLInjection() {
         try {
             visualizarElemento(tablaResultados, 10);
-            Assertions.assertTrue(
-                    tablaResultados.isDisplayed(),
-                    "La aplicación devolvió un resultado inesperado.");
+            Assert.assertTrue("La aplicación devolvió un resultado inesperado.", tablaResultados.isDisplayed());
         } catch (Exception e) {
-            Assertions.fail("Error validando SQL Injection: " + e.getMessage());
+            Assert.fail("Error validando SQL Injection: " + e.getMessage());
         }
 
     }
@@ -424,7 +403,7 @@ public class PimPage extends BaseController {
             visualizarElemento(btnAdd, 10);
             btnAdd.click();
         } catch (Exception e) {
-            Assertions.fail("Error al abrir Add Employee: " + e.getMessage());
+            Assert.fail("Error al abrir Add Employee: " + e.getMessage());
         }
     }
 
@@ -433,7 +412,7 @@ public class PimPage extends BaseController {
             visualizarElemento(btnEmployeeList, 10);
             btnEmployeeList.click();
         } catch (Exception e) {
-            Assertions.fail("Error al volver a Employee List: " + e.getMessage());
+            Assert.fail("Error al volver a Employee List: " + e.getMessage());
         }
     }
 
@@ -458,7 +437,7 @@ public class PimPage extends BaseController {
             txtLastName.sendKeys(apellido);
 
         } catch (Exception e) {
-            Assertions.fail("Error ingresando empleado: " + e.getMessage());
+            Assert.fail("Error ingresando empleado: " + e.getMessage());
         }
     }
 
@@ -468,7 +447,7 @@ public class PimPage extends BaseController {
             visualizarElemento(btnSave, 10);
             btnSave.click();
         } catch (Exception e) {
-            Assertions.fail("Error guardando empleado: " + e.getMessage());
+            Assert.fail("Error guardando empleado: " + e.getMessage());
         }
     }
 
@@ -478,7 +457,7 @@ public class PimPage extends BaseController {
             visualizarElemento(txtEmployeeIdNuevo, 10);
             employeeIdGenerado = txtEmployeeIdNuevo.getAttribute("value");
         } catch (Exception e) {
-            Assertions.fail("Error obteniendo Employee ID: " + e.getMessage());
+            Assert.fail("Error obteniendo Employee ID: " + e.getMessage());
         }
     }
 
@@ -498,20 +477,16 @@ public class PimPage extends BaseController {
 
     // validar creación
     public void validarEmpleadoCreado() {
-        Assertions.assertFalse(
-                registrosEncontrados.isEmpty(),
-                "No se encontró el empleado creado.");
+        Assert.assertFalse("No se encontró el empleado creado.", registrosEncontrados.isEmpty());
     }
 
     // validar eliminación
     public void validarEmpleadoEliminado() {
         try {
             visualizarElemento(lblNoRecords, 10);
-            Assertions.assertTrue(
-                    lblNoRecords.isDisplayed(),
-                    "El empleado aún existe.");
+            Assert.assertTrue("El empleado aún existe.", lblNoRecords.isDisplayed());
         } catch (Exception e) {
-            Assertions.fail("Error validando eliminación: " + e.getMessage());
+            Assert.fail("Error validando eliminación: " + e.getMessage());
         }
     }
 
@@ -529,7 +504,7 @@ public class PimPage extends BaseController {
             btnYesDelete.click();
 
         } catch (Exception e) {
-            Assertions.fail("Error eliminando empleado: " + e.getMessage());
+            Assert.fail("Error eliminando empleado: " + e.getMessage());
         }
     }
 
@@ -548,17 +523,17 @@ public class PimPage extends BaseController {
 
         visualizarElemento(txtFirstName, 10);
 
-        Assertions.assertEquals(
+        Assert.assertEquals(
                 firstNameGenerado,
                 txtFirstName.getAttribute("value"),
                 "El nombre no coincide.");
 
-        Assertions.assertEquals(
+        Assert.assertEquals(
                 lastNameGenerado,
                 txtLastName.getAttribute("value"),
                 "El apellido no coincide.");
 
-        Assertions.assertEquals(
+        Assert.assertEquals(
                 employeeIdGenerado,
                 txtEmployeeIdNuevo.getAttribute("value"),
                 "El Employee ID no coincide.");

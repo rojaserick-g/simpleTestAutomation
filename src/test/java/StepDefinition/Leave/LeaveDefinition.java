@@ -78,8 +78,8 @@ public class LeaveDefinition {
 
 
 
-    @And("the user enters employee name {string}")
-    public void theUserEntersEmployeeName(String employeeName) {
+    @And("the user enters Leave employee name {string}")
+    public void theUserEntersEmployeeName2(String employeeName) {
         leavePage.txtEmployeeName.clear();
         leavePage.txtEmployeeName.sendKeys(employeeName);
     }
@@ -93,7 +93,7 @@ public class LeaveDefinition {
         );
     }
     //test2
-    @When("the user types {string} in Employee Name field")
+    @When("the user types {string} in Leave Employee Name field")
     public void theUserTypesInEmployeeNameField(String partialName) {
         leavePage.getTxtEmployeeName().clear();
         leavePage.getTxtEmployeeName().sendKeys(partialName);
@@ -116,8 +116,8 @@ public class LeaveDefinition {
 // TEST 3 - SEARCH BY SUB UNIT
 // =====================================================
 
-    @When("the user selects sub unit {string}")
-    public void theUserSelectsSubUnit(String subUnit) {
+    @When("the user selects Leave sub unit {string}")
+    public void theUserSelectsSubUnit2(String subUnit) {
 
         WebDriver d = leavePage.getDriver();
         WebDriverWait wait =

@@ -6,8 +6,9 @@ Feature: Employee Timesheet Management
   So that I can control and review worked hours
 
   Background:
-    Given the user is logged into OrangeHRM
-    And the user navigates to Employee Timesheets page
+    Given open the browser and navigate to "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
+    And the user is logged into OrangeHRM with user "Admin" and password "admin123"
+    And user navigates to Leave List page
 
   @Test-01
   Scenario Outline: Search timesheet by employee name

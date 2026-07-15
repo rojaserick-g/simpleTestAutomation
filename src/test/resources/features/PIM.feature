@@ -2,15 +2,13 @@
 Feature: Employee List Search and Filters
 
   Background:
-    Given abrir el navegador en la url "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
-    And ingresar el usuario "Admin"
-    And ingresar la pass "admin123"
-    When presiono el boton Login
-    And el usuario ingresa al modulo PIM
+    Given open the browser and navigate to "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
+    And the user is logged into OrangeHRM with user "Admin" and password "admin123"
+    And user navigates to Leave List page
 
   @TC-001
   Scenario Outline: Search employee by name
-    When the user enters "<employeeName>" in Employee Name field
+    When the user enters "<employeeName>" in PIM Employee Name field
     And clicks Search
     Then search results should be displayed
     And every result should contain "<expectedName>"
@@ -20,7 +18,7 @@ Feature: Employee List Search and Filters
 
   @TC-002
   Scenario Outline: Search employee name ignoring case sensitivity
-    When the user searches employee "<employeeName>"
+    When the user searches PIM employee "<employeeName>"
     Then the results should be identical for the same employee "<expectedName>"
     Examples:
       | employeeName | expectedName |
