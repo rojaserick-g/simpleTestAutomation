@@ -1,12 +1,15 @@
 @PIM
 Feature: Employee List Search and Filters
+  # Inicia sesión en OrangeHRM y accede al módulo PIM
 
   Background:
     Given open the browser and navigate to "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
     And the user is logged into OrangeHRM with user "Admin" and password "admin123"
-    And user navigates to Leave List page
+    And el usuario ingresa al modulo PIM
 
-  @TC-001
+
+    #Buscar un empleado por nombre
+  @PIM @TC-001
   Scenario Outline: Search employee by name
     When the user enters "<employeeName>" in PIM Employee Name field
     And clicks Search
@@ -16,7 +19,8 @@ Feature: Employee List Search and Filters
       | employeeName | expectedName |
       | Amelia       | Amelia       |
 
-  @TC-002
+   #Validar que la búsqueda no diferencie mayúsculas y minúsculas
+  @PIM @TC-002
   Scenario Outline: Search employee name ignoring case sensitivity
     When the user searches PIM employee "<employeeName>"
     Then the results should be identical for the same employee "<expectedName>"
@@ -26,7 +30,8 @@ Feature: Employee List Search and Filters
       | AMELIA       | Amelia       |
       | aMeLiA       | Amelia       |
 
-  @TC-003
+     # Buscar un empleado utilizando su Employee ID
+  @PIM @TC-003
  Scenario Outline: Search employee by employee id
     When the user enters employee id "<employeeId>"
     And clicks Search
@@ -36,6 +41,7 @@ Feature: Employee List Search and Filters
       | 0001 | 1 |
       | 999999 | 0 |
 
+   # Filtrar empleados por Employment Status
   @PIM @TC-004
   Scenario Outline: Search employees by employment status
     When the user selects employment status "<status>"
@@ -49,6 +55,7 @@ Feature: Employee List Search and Filters
       | Full-Time Probation   |
       | Part-Time Contract    |
 
+      # Filtrar empleados utilizando la opción Include
   @PIM @TC-005
   Scenario Outline: Search employees using include filter
     When the user selects include option "<includeOption>"
@@ -60,6 +67,7 @@ Feature: Employee List Search and Filters
       | Current and Past Employees |
       | Past Employees Only        |
 
+     # Filtrar empleados por Job Title (Cargo)
   @PIM @TC-006
   Scenario Outline: Search employees by job title
     When the user selects job title "<jobTitle>"
@@ -71,6 +79,7 @@ Feature: Employee List Search and Filters
       | Automation Engineer L000 |
       | Automation Tester        |
 
+     #  Filtrar empleados por Sub Unit (Departamento)
   @PIM @TC-007
   Scenario Outline: Search employees by sub unit
     When the user selects sub unit "<subUnit>"
@@ -84,7 +93,7 @@ Feature: Employee List Search and Filters
       | Development       |
       | Quality Assurance |
 
-
+   # Filtrar empleados por Supervisor
   @PIM @TC-008
   Scenario Outline: Search employees by supervisor
     When the user selects supervisor "<supervisor>"
@@ -96,7 +105,7 @@ Feature: Employee List Search and Filters
       | Peter Anderson   |
       | Linda Brown      |
 
-
+   #Buscar empleados utilizando múltiples filtros al mismo tiempo
   @PIM @TC-009
   Scenario Outline: Search employee with multiple filters
     When the user enters employee name "<employeeName>"
@@ -109,6 +118,7 @@ Feature: Employee List Search and Filters
       | employeeName | status | jobTitle | subUnit |
       | James        |        |          |          |
 
+      # Verificar que el botón Reset limpie todos los filtros
   @PIM @TC-010
   Scenario Outline: Reset search filters
     Given the user performs a search using:
@@ -122,14 +132,23 @@ Feature: Employee List Search and Filters
       | James        | Freelance           |
       | Amelia       | Full-Time Contract  |
 
-  #@PIM @TC-011
-  #Scenario: Validate created employee information
-    #Given a new employee is created with:
-      #| firstName | lastName |
-      #| Erick     | Rojas    |
-    #When the user opens the created employee
-    #Then employee detail page should display
 
+  # Abrir el detalle de un empleado y validar su información
+  @PIM @TC-011
+  Scenario Outline: Validate employee information from list and detail page
+    When the user opens employee "<employeeName>" from the search results
+    Then employee detail page should display:
+      | field | value |
+      | Name | <employeeName> |
+      | Id   | <employeeId> |
+
+    Examples:
+      | employeeName | employeeId |
+      |James Butler |0365 |
+     ## | John Doe   |0412 |
+
+
+  #Navegar entre las páginas de la lista de empleados
   @PIM @TC-012
   Scenario Outline: Navigate through employee list pages
     When the user navigates to page "<pageNumber>"
@@ -141,6 +160,8 @@ Feature: Employee List Search and Filters
       | 2 |
       | 3 |
 
+
+  # Validar protección contra ataques XSS en el campo Employee Name
   @PIM @TC-013
   Scenario Outline: Validate XSS protection in employee name search
     When the user enters "<maliciousInput>" in Employee Name field
@@ -152,6 +173,7 @@ Feature: Employee List Search and Filters
       | <script>alert('xss')</script> |
       | x                            |
 
+      # Validar protección contra SQL Injection
   @PIM @TC-014
   Scenario Outline: Validate SQL Injection protection
     When the user enters "<maliciousInput>" into Employee Name
@@ -164,6 +186,7 @@ Feature: Employee List Search and Filters
       | admin' --                   |
       | ' UNION SELECT * FROM users -- |
 
+      # Crear un empleado y verificar que pueda encontrarse mediante su Employee ID
   @PIM @TC-015
   Scenario Outline: Create and find employee
     Given a new employee is created with:
@@ -175,16 +198,21 @@ Feature: Employee List Search and Filters
       | firstName | lastName |
       | Leslie    | Prueba   |
 
-  @PIM @TC-016
-  Scenario Outline: Delete employee and validate removal
-    Given employee "<employeeId>" exists
-    When the employee is deleted
-    And searches by employee id "<employeeId>"
-    Then no records should be found
-    Examples:
-      | employeeId |
-      | 0460 |
 
+  # Eliminar un empleado existente y comprobar que ya no aparece en la búsqueda
+  # TC-016 deshabilitado temporalmente.
+# El Employee ID utilizado como dato de prueba ya no existe en el ambiente demo de OrangeHRM.
+  #@PIM @TC-016
+  #Scenario Outline: Delete employee and validate removal
+    #Given employee "<employeeId>" exists
+    #When the employee is deleted
+    #And searches by employee id "<employeeId>"
+    #Then no records should be found
+   # Examples:
+      #| employeeId |
+      #| 0460 |
+
+      # Crear un empleado, eliminarlo y verificar que fue eliminado correctamente
   @PIM @TC-017
   Scenario: Delete employee and validate removal
     Given a new employee is created with:

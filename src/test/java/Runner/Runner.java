@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
         glue = {"StepDefinition"},
         plugin = {"pretty", "html:target/cucumber-report.html"},
         monochrome = true,
-        tags = "@PIM"
+        tags ="@PIM"
 )
 
 public class Runner {
