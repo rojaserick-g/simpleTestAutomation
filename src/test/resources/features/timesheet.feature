@@ -18,7 +18,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName |
-      | Linda Anderson |
+      | Charlotte Smith |
       | John Smith |
       | Paul Collings |
 
@@ -52,7 +52,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName   | period |
-      | Linda Anderson | 2026-01-05 |
+      | Charlotte Smith | 2026-01-05 |
 
   @Test-05
   Scenario Outline: Validate behavior when timesheet does not exist
@@ -83,7 +83,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName |
-      | Linda Anderson |
+      | Charlotte Smith |
 
   @Test-08
   Scenario Outline: Validate daily worked hours
@@ -102,7 +102,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName |
-      | Linda Anderson |
+      | Charlotte Smith |
       | John Smith |
 
   Scenario Outline: Validate project allocation hours
@@ -112,7 +112,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName | project |
-      | Linda Anderson | ACME |
+      | Charlotte Smith | ACME |
       | John Smith | Internal Support |
 
   Scenario Outline: Update worked hours in timesheet
@@ -123,8 +123,8 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName | day | hours |
-      | Linda Anderson | Monday | 8 |
-      | Linda Anderson | Tuesday | 6 |
+      | Charlotte Smith | Monday | 8 |
+      | Charlotte Smith | Tuesday | 6 |
 
   Scenario Outline: Save timesheet modifications
     Given employee "<employeeName>" timesheet is open
@@ -134,7 +134,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName |
-      | Linda Anderson |
+      | Charlotte Smith |
 
   Scenario Outline: Prevent negative hours registration
     Given employee "<employeeName>" timesheet is editable
@@ -144,8 +144,8 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName | hours |
-      | Linda Anderson | -1 |
-      | Linda Anderson | -5 |
+      | Charlotte Smith | -1 |
+      | Charlotte Smith | -5 |
 
   Scenario Outline: Prevent invalid hour formats
     Given employee "<employeeName>" timesheet is editables
@@ -154,9 +154,9 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName | invalidValue |
-      | Linda Anderson | ABC |
-      | Linda Anderson | @@ |
-      | Linda Anderson | ### |
+      | Charlotte Smith | ABC |
+      | Charlotte Smith | @@ |
+      | Charlotte Smith | ### |
 
   Scenario Outline: Reset employee timesheet search criteria
     Given the user searched for employee "<employeeName>"
@@ -165,7 +165,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName |
-      | Linda Anderson |
+      | Charlotte Smith |
 
   Scenario Outline: Validate project totals calculation
     Given employee "<employeeName>" has multiple projects
@@ -174,7 +174,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName |
-      | Linda Anderson |
+      | Charlotte Smith |
 
   Scenario Outline: Create a new employee timesheet
     Given employee "<employeeName>" does not have a timesheet for "<period>"
@@ -193,7 +193,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName |
-      | Linda Anderson |
+      | Charlotte Smith |
 
   Scenario Outline: Search timesheet for non-existing employee
     When the user searches employee "<employeeName>"
@@ -234,7 +234,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName | period |
-      | Linda Anderson | 2026-08-03 |
+      | Charlotte Smith | 2026-08-03 |
 
   Scenario Outline: Update and validate timesheet
     Given employee "<employeeName>" has an existing timesheet
@@ -244,7 +244,7 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName |
-      | Linda Anderson |
+      | Charlotte Smith |
 
   Scenario Outline: Submit and approve employee timesheet
     Given employee "<employeeName>" completed a timesheet
@@ -253,4 +253,4 @@ Feature: Employee Timesheet Management
 
     Examples:
       | employeeName |
-      | Linda Anderson |
+      | Charlotte Smith |
