@@ -36,10 +36,12 @@ public class PimDefinition {
     public void searchResultsShouldBeDisplayed() {
         pimPage.validarResultadosVisibles();
     }
+
     @Then("every result should contain {string}")
     public void everyResultShouldContain(String nombre) {
         pimPage.validarNombreEmpleado(nombre);
     }
+
     @Then("the system should return {string} record\\(s)")
     public void theSystemShouldReturnRecordS(String cantidad) {
         pimPage.validarCantidadRegistros(cantidad);
@@ -77,6 +79,7 @@ public class PimDefinition {
         pimPage.seleccionarInclude(opcion);
 
     }
+
     @Then("results should belong to {string}")
     public void resultsShouldBelongTo(String opcion) {
 
@@ -89,6 +92,7 @@ public class PimDefinition {
         pimPage.seleccionarJobTitle(cargo);
 
     }
+
     @Then("every result should have job title {string}")
     public void everyResultShouldHaveJobTitle(String cargo) {
         pimPage.validarResultadosVisibles();
@@ -154,13 +158,14 @@ public class PimDefinition {
         pimPage.validarResultadosFiltros();
 
     }
+
     @io.cucumber.java.en.Given("the user performs a search using:")
     public void theUserPerformsASearchUsing(io.cucumber.datatable.DataTable dataTable) {
-        java.util.List<java.util.Map<String,String>> datos = dataTable.asMaps(String.class,String.class);
+        java.util.List<java.util.Map<String, String>> datos = dataTable.asMaps(String.class, String.class);
         String nombre = datos.get(0).get("employeeName");
         String estado = datos.get(0).get("status");
         pimPage.escribirNombreEmpleado(nombre);
-        if(!estado.trim().isEmpty()){
+        if (!estado.trim().isEmpty()) {
             pimPage.seleccionarEmploymentStatus(estado);
         }
         pimPage.clickSearch();
@@ -184,6 +189,7 @@ public class PimDefinition {
         pimPage.validarCamposReseteados();
 
     }
+
     @When("the user navigates to page {string}")
     public void theUserNavigatesToPage(String pagina) {
         pimPage.navegarPagina(pagina);
@@ -201,38 +207,50 @@ public class PimDefinition {
         pimPage.validarRegistrosPagina();
 
     }
+
     @Then("no script should be executed")
     public void noScriptShouldBeExecuted() {
         pimPage.validarNoEjecucionScript();
 
     }
+
     @Then("the application should remain stable")
     public void theApplicationShouldRemainStable() {
         pimPage.validarAplicacionEstable();
 
     }
+
     @When("the user enters {string} into Employee Name")
     public void theUserEntersIntoEmployeeName(String maliciousInput) {
         pimPage.escribirNombreEmpleado(maliciousInput);
 
     }
+
     @Then("unauthorized records should not be returned")
     public void unauthorizedRecordsShouldNotBeReturned() {
         pimPage.validarSQLInjection();
 
     }
+
     @Given("a new employee is created with:")
     public void aNewEmployeeIsCreatedWith(DataTable dataTable) {
-        List<Map<String,String>> datos =
-                dataTable.asMaps(String.class,String.class);
+
+        List<Map<String, String>> datos =
+                dataTable.asMaps(String.class, String.class);
+
         String nombre = datos.get(0).get("firstName");
         String apellido = datos.get(0).get("lastName");
-        pimPage.clickAdd();
-        pimPage.ingresarNuevoEmpleado(nombre,apellido);
-        pimPage.guardarEmployeeId();
-        pimPage.guardarEmpleado();
 
+        pimPage.clickAdd();
+        pimPage.ingresarNuevoEmpleado(nombre, apellido);
+
+        // Guardar el ID antes del Save
+        pimPage.guardarEmployeeId();
+
+        // Guardar el empleado
+        pimPage.guardarEmpleado();
     }
+
     @When("the user searches using generated employee id")
     public void theUserSearchesUsingGeneratedEmployeeId() {
         pimPage.buscarEmpleadoCreado();
@@ -243,39 +261,48 @@ public class PimDefinition {
         pimPage.validarEmpleadoCreado();
 
     }
+
     @Given("employee {string} exists")
-    public void employeeExists(String employeeId){
-
+    public void employeeExists(String employeeId) {
+        pimPage.setEmployeeIdGenerado(employeeId);
         pimPage.buscarEmpleado(employeeId);
-
     }
+
     @When("the employee is deleted")
-    public void theEmployeeIsDeleted(){
+    public void theEmployeeIsDeleted() {
 
         pimPage.eliminarEmpleado();
 
     }
+
     @When("searches by employee id {string}")
-    public void searchesByEmployeeId(String employeeId){
+    public void searchesByEmployeeId(String employeeId) {
 
         pimPage.buscarEmpleado(employeeId);
 
     }
+
     @Then("no records should be found")
     public void noRecordsShouldBeFound() {
         pimPage.validarEmpleadoEliminado();
     }
-    @When("the user opens the created employee")
-    public void theUserOpensTheCreatedEmployee() {
 
-        pimPage.abrirEmpleadoCreado();
-
+    @When("the user opens employee {string} from the search results")
+    public void theUserOpensEmployeeFromTheSearchResults(String employeeName) {
+        pimPage.escribirNombreEmpleado(employeeName);
+        pimPage.clickSearch();
+        pimPage.abrirDetalleEmpleado();
     }
 
-    @Then("employee detail page should display")
-    public void employeeDetailPageShouldDisplay() {
+    @Then("employee detail page should display:")
+    public void employeeDetailPageShouldDisplay(DataTable dataTable) {
 
-        pimPage.validarInformacionEmpleado();
+        List<Map<String, String>> datos =
+                dataTable.asMaps(String.class, String.class);
 
+        String nombre = datos.get(0).get("value");
+        String employeeId = datos.get(1).get("value");
+
+        pimPage.validarInformacionEmpleado(nombre, employeeId);
     }
 }

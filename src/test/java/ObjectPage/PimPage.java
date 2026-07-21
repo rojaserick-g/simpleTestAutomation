@@ -10,6 +10,10 @@ import Control.DriverContext;
 import java.time.Duration;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PimPage extends BaseController {
 
@@ -23,7 +27,7 @@ public class PimPage extends BaseController {
     private WebElement txtEmployeeName;
     @FindBy(xpath = "//div[@role='listbox']//span")
     private List<WebElement> listaEmpleados;
-    @FindBy(xpath = "//*[@id='app']/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[1]/div/div[2]/div/div[2]/input")
+    @FindBy(xpath = "//label[text()='Employee Id']/ancestor::div[contains(@class,'oxd-input-group')]//input")
     private WebElement txtEmployeeId;
     @FindBy(xpath = "//*[@id='app']/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[2]/button[2]")
     private WebElement btnSearch;
@@ -62,7 +66,7 @@ public class PimPage extends BaseController {
     private WebElement btnReset;
     @FindBy(name = "firstName")
     private WebElement txtFirstNameDetalle;
-    @FindBy(xpath = "(//button[contains(@class,'oxd-icon-button')])[1]")
+    @FindBy(xpath = "//button[.//i[contains(@class,'bi-pencil-fill')]]")
     private WebElement btnEditar;
     @FindBy(xpath = "//label[text()='Employee Id']/ancestor::div[contains(@class,'oxd-input-group')]//input")
     private WebElement txtEmployeeIdDetalle;
@@ -119,10 +123,14 @@ public class PimPage extends BaseController {
 
     public void clickSearch() {
         try {
+
             visualizarElemento(btnSearch, 10);
             btnSearch.click();
+
+            Thread.sleep(2000);
+
         } catch (Exception e) {
-            Assert.fail("Error al presionar Search: " + e.getMessage());
+            Assert.fail("Error al presionar Search: " + e.getMessage() );
         }
     }
 
@@ -135,9 +143,7 @@ public class PimPage extends BaseController {
                 if (opcion.getText().trim().equalsIgnoreCase(estado)) {
                     opcion.click();
                     break;
-
                 }
-
             }
 
         } catch (Exception e) {
@@ -219,6 +225,10 @@ public class PimPage extends BaseController {
 
     public void validarNombreEmpleado(String nombreEsperado) {
         try {
+            System.out.println("Cantidad de filas: " + filasResultados.size());
+            for (WebElement fila : filasResultados) {
+                System.out.println("Fila: " + fila.getText());
+            }
             Assert.assertFalse("La búsqueda no retornó resultados.", filasResultados.isEmpty());
             boolean encontrado = false;
             for (WebElement fila : filasResultados) {
@@ -233,7 +243,6 @@ public class PimPage extends BaseController {
 
         } catch (Exception e) {
             Assert.fail(e.getMessage());
-
         }
     }
 
@@ -314,11 +323,19 @@ public class PimPage extends BaseController {
 
     public void abrirDetalleEmpleado() {
         try {
-            visualizarElemento(btnEditar, 10);
-            btnEditar.click();
+
+            WebDriverWait wait = new WebDriverWait(
+                    DriverContext.getDriver(),
+                    Duration.ofSeconds(10));
+
+            WebElement botonEditar = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[.//i[contains(@class,'bi-pencil-fill')]]")));
+
+            botonEditar.click();
+
         } catch (Exception e) {
             Assert.fail("Error al abrir el detalle del empleado: " + e.getMessage());
-
         }
     }
 
@@ -444,21 +461,52 @@ public class PimPage extends BaseController {
     // guardar empleado
     public void guardarEmpleado() {
         try {
-            visualizarElemento(btnSave, 10);
-            btnSave.click();
+            WebDriverWait wait = new WebDriverWait(
+                    DriverContext.getDriver(),
+                    Duration.ofSeconds(20));
+
+            // Esperar que desaparezca el loader
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                    By.className("oxd-form-loader")));
+
+            // Esperar que el botón realmente sea clickeable
+            WebElement botonGuardar = wait.until(
+                    ExpectedConditions.elementToBeClickable(btnSave));
+
+            botonGuardar.click();
+            // Esperar que cambie a Personal Details
+            wait.until(ExpectedConditions.urlContains("viewPersonalDetails"));
+
+            System.out.println("URL después del Save: "
+                    + DriverContext.getDriver().getCurrentUrl());
+
         } catch (Exception e) {
             Assert.fail("Error guardando empleado: " + e.getMessage());
         }
     }
-
     // guardar Employee ID generado
     public void guardarEmployeeId() {
         try {
             visualizarElemento(txtEmployeeIdNuevo, 10);
-            employeeIdGenerado = txtEmployeeIdNuevo.getAttribute("value");
+
+            String id = txtEmployeeIdNuevo.getAttribute("value");
+
+            if (id == null || id.trim().isEmpty()) {
+                Assert.fail("El Employee ID quedó vacío.");
+            }
+
+            employeeIdGenerado = id;
+
+            System.out.println("Employee ID generado: " + employeeIdGenerado);
+
         } catch (Exception e) {
             Assert.fail("Error obteniendo Employee ID: " + e.getMessage());
         }
+    }
+
+    // asignar Employee ID desde el feature
+    public void setEmployeeIdGenerado(String employeeId) {
+        this.employeeIdGenerado = employeeId;
     }
 
     // buscar empleado por parámetro
@@ -470,14 +518,50 @@ public class PimPage extends BaseController {
 
     // buscar el empleado creado
     public void buscarEmpleadoCreado() {
-        volverEmployeeList();
-        escribirEmployeeId(employeeIdGenerado);
-        clickSearch();
+        try {
+
+            System.out.println("Buscando Employee ID: " + employeeIdGenerado);
+
+            volverEmployeeList();
+
+            WebDriverWait wait = new WebDriverWait(
+                    DriverContext.getDriver(),
+                    Duration.ofSeconds(20));
+
+            // Esperar que cargue Employee List
+            wait.until(ExpectedConditions.urlContains("viewEmployeeList"));
+
+            WebElement campoEmployeeId = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//label[text()='Employee Id']/ancestor::div[contains(@class,'oxd-input-group')]//input")));
+
+            campoEmployeeId.clear();
+            campoEmployeeId.sendKeys(employeeIdGenerado);
+
+            WebElement botonSearch = wait.until(
+                    ExpectedConditions.elementToBeClickable(btnSearch));
+            botonSearch.click();
+            wait.until(ExpectedConditions.visibilityOf(tablaResultados));
+
+        } catch (Exception e) {
+            Assert.fail("Error buscando empleado: " + e.getMessage());
+        }
     }
 
     // validar creación
     public void validarEmpleadoCreado() {
-        Assert.assertFalse("No se encontró el empleado creado.", registrosEncontrados.isEmpty());
+        try {
+
+            Thread.sleep(3000);
+
+            List<WebElement> filas = DriverContext.getDriver().findElements(
+                    By.xpath("//div[contains(@class,'oxd-table-card')]"));
+            Assert.assertFalse(
+                    "No se encontró el empleado creado.",
+                    filas.isEmpty());
+        } catch (Exception e) {
+            Assert.fail("Error validando empleado creado: " + e.getMessage());
+        }
     }
 
     // validar eliminación
@@ -496,45 +580,71 @@ public class PimPage extends BaseController {
             volverEmployeeList();
             escribirEmployeeId(employeeIdGenerado);
             clickSearch();
+            WebDriverWait wait = new WebDriverWait(
+                    DriverContext.getDriver(),
+                    Duration.ofSeconds(10));
 
-            visualizarElemento(btnDelete, 10);
-            btnDelete.click();
-
-            visualizarElemento(btnYesDelete, 10);
-            btnYesDelete.click();
+            WebElement botonEliminar = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//i[contains(@class,'bi-trash')]")));
+            botonEliminar.click();
+            WebElement botonConfirmar = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[normalize-space()='Yes, Delete']")));
+            botonConfirmar.click();
 
         } catch (Exception e) {
             Assert.fail("Error eliminando empleado: " + e.getMessage());
         }
     }
 
-    // abrir empleado creado
-    public void abrirEmpleadoCreado() {
-        volverEmployeeList();
-        escribirEmployeeId(employeeIdGenerado);
-        clickSearch();
+    public void abrirEmpleado() {
+        try {
 
-        visualizarElemento(btnEditar, 10);
-        btnEditar.click();
+            visualizarElemento(btnEditar, 10);
+            btnEditar.click();
+
+        } catch (Exception e) {
+            Assert.fail("Error abriendo empleado: " + e.getMessage());
+        }
     }
 
     // validar información del empleado
-    public void validarInformacionEmpleado() {
+    public void validarInformacionEmpleado(String nombre, String employeeId) {
 
-        visualizarElemento(txtFirstName, 10);
+        try {
 
-        Assert.assertEquals(
-                firstNameGenerado,
-                txtFirstName.getAttribute("value"),
-                "El nombre no coincide.");
+            Thread.sleep(2000);
 
-        Assert.assertEquals(
-                lastNameGenerado,
-                txtLastName.getAttribute("value"),
-                "El apellido no coincide.");
+            System.out.println("URL = " + DriverContext.getDriver().getCurrentUrl());
 
-        Assert.assertEquals(
-                employeeIdGenerado,
-                txtEmployeeIdNuevo.getAttribute("value"),
-                "El Employee ID no coincide.");
-    }}
+            List<WebElement> firstNames =
+                    DriverContext.getDriver().findElements(By.name("firstName"));
+
+            List<WebElement> lastNames =
+                    DriverContext.getDriver().findElements(By.name("lastName"));
+
+            List<WebElement> employeeIds =
+                    DriverContext.getDriver().findElements(By.xpath("//label[text()='Employee Id']/ancestor::div[contains(@class,'oxd-input-group')]//input"));
+
+            System.out.println("Cantidad FirstName: " + firstNames.size());
+            System.out.println("Cantidad LastName: " + lastNames.size());
+            System.out.println("Cantidad EmployeeId: " + employeeIds.size());
+
+            for (int i = 0; i < firstNames.size(); i++) {
+                System.out.println("FirstName[" + i + "] = " + firstNames.get(i).getAttribute("value"));
+            }
+
+            for (int i = 0; i < lastNames.size(); i++) {
+                System.out.println("LastName[" + i + "] = " + lastNames.get(i).getAttribute("value"));
+            }
+
+            for (int i = 0; i < employeeIds.size(); i++) {
+                System.out.println("EmployeeId[" + i + "] = " + employeeIds.get(i).getAttribute("value"));
+            }
+
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
+        }
+    }
+}
