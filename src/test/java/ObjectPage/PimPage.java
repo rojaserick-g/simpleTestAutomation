@@ -130,7 +130,7 @@ public class PimPage extends BaseController {
             Thread.sleep(2000);
 
         } catch (Exception e) {
-            Assert.fail("Error al presionar Search: " + e.getMessage());
+            Assert.fail("Error al presionar Search: " + e.getMessage() );
         }
     }
 
