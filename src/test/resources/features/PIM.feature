@@ -1,7 +1,6 @@
 @PIM
 Feature: Employee List Search and Filters
   # Inicia sesión en OrangeHRM y accede al módulo PIM
-
   Background:
     Given open the browser and navigate to "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
     And the user is logged into OrangeHRM with user "Admin" and password "admin123"
@@ -19,7 +18,7 @@ Feature: Employee List Search and Filters
       | employeeName | expectedName |
       | Amelia       | Amelia       |
 
-   #Validar que la búsqueda no diferencie mayúsculas y minúsculas
+   #Validar que la búsqueda no diferencie mayusculas y minusculas
   @PIM @TC-002
   Scenario Outline: Search employee name ignoring case sensitivity
     When the user searches PIM employee "<employeeName>"
@@ -79,7 +78,7 @@ Feature: Employee List Search and Filters
       | Automation Engineer L000 |
       | Automation Tester        |
 
-     #  Filtrar empleados por Sub Unit (Departamento)
+     #  Filtrar empleados por SubUnit (Departamento)
   @PIM @TC-007
   Scenario Outline: Search employees by sub unit
     When the user selects sub unit "<subUnit>"
@@ -105,7 +104,7 @@ Feature: Employee List Search and Filters
       | Peter Anderson   |
       | Linda Brown      |
 
-   #Buscar empleados utilizando múltiples filtros al mismo tiempo
+   #Buscar empleados utilizando multiples filtros al mismo tiempo
   @PIM @TC-009
   Scenario Outline: Search employee with multiple filters
     When the user enters employee name "<employeeName>"
@@ -118,7 +117,7 @@ Feature: Employee List Search and Filters
       | employeeName | status | jobTitle | subUnit |
       | James        |        |          |          |
 
-      # Verificar que el botón Reset limpie todos los filtros
+      # Verificar que el boton Reset limpie todos los filtros
   @PIM @TC-010
   Scenario Outline: Reset search filters
     Given the user performs a search using:
@@ -133,7 +132,7 @@ Feature: Employee List Search and Filters
       | Amelia       | Full-Time Contract  |
 
 
-  # Abrir el detalle de un empleado y validar su información
+  # Abrir el detalle de un empleado y validar su informacion
   @PIM @TC-011
   Scenario Outline: Validate employee information from list and detail page
     When the user opens employee "<employeeName>" from the search results
@@ -141,7 +140,6 @@ Feature: Employee List Search and Filters
       | field | value |
       | Name | <employeeName> |
       | Id   | <employeeId> |
-
     Examples:
       | employeeName | employeeId |
       |James Butler |0365 |

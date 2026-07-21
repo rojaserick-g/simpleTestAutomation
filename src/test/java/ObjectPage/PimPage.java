@@ -143,9 +143,7 @@ public class PimPage extends BaseController {
                 if (opcion.getText().trim().equalsIgnoreCase(estado)) {
                     opcion.click();
                     break;
-
                 }
-
             }
 
         } catch (Exception e) {
@@ -227,15 +225,11 @@ public class PimPage extends BaseController {
 
     public void validarNombreEmpleado(String nombreEsperado) {
         try {
-
             System.out.println("Cantidad de filas: " + filasResultados.size());
-
             for (WebElement fila : filasResultados) {
                 System.out.println("Fila: " + fila.getText());
             }
-
             Assert.assertFalse("La búsqueda no retornó resultados.", filasResultados.isEmpty());
-
             boolean encontrado = false;
             for (WebElement fila : filasResultados) {
                 String texto = fila.getText();
@@ -245,7 +239,6 @@ public class PimPage extends BaseController {
                     break;
                 }
             }
-
             Assert.assertTrue("No se encontró el empleado: " + nombreEsperado, encontrado);
 
         } catch (Exception e) {
@@ -468,7 +461,6 @@ public class PimPage extends BaseController {
     // guardar empleado
     public void guardarEmpleado() {
         try {
-
             WebDriverWait wait = new WebDriverWait(
                     DriverContext.getDriver(),
                     Duration.ofSeconds(20));
@@ -482,7 +474,6 @@ public class PimPage extends BaseController {
                     ExpectedConditions.elementToBeClickable(btnSave));
 
             botonGuardar.click();
-
             // Esperar que cambie a Personal Details
             wait.until(ExpectedConditions.urlContains("viewPersonalDetails"));
 
@@ -518,7 +509,6 @@ public class PimPage extends BaseController {
         this.employeeIdGenerado = employeeId;
     }
 
-
     // buscar empleado por parámetro
     public void buscarEmpleado(String employeeId) {
         volverEmployeeList();
@@ -538,7 +528,7 @@ public class PimPage extends BaseController {
                     DriverContext.getDriver(),
                     Duration.ofSeconds(20));
 
-            // Esperar que realmente cargue Employee List
+            // Esperar que cargue Employee List
             wait.until(ExpectedConditions.urlContains("viewEmployeeList"));
 
             WebElement campoEmployeeId = wait.until(
@@ -550,9 +540,7 @@ public class PimPage extends BaseController {
 
             WebElement botonSearch = wait.until(
                     ExpectedConditions.elementToBeClickable(btnSearch));
-
             botonSearch.click();
-
             wait.until(ExpectedConditions.visibilityOf(tablaResultados));
 
         } catch (Exception e) {
@@ -568,11 +556,9 @@ public class PimPage extends BaseController {
 
             List<WebElement> filas = DriverContext.getDriver().findElements(
                     By.xpath("//div[contains(@class,'oxd-table-card')]"));
-
             Assert.assertFalse(
                     "No se encontró el empleado creado.",
                     filas.isEmpty());
-
         } catch (Exception e) {
             Assert.fail("Error validando empleado creado: " + e.getMessage());
         }
@@ -594,7 +580,6 @@ public class PimPage extends BaseController {
             volverEmployeeList();
             escribirEmployeeId(employeeIdGenerado);
             clickSearch();
-
             WebDriverWait wait = new WebDriverWait(
                     DriverContext.getDriver(),
                     Duration.ofSeconds(10));
@@ -602,13 +587,10 @@ public class PimPage extends BaseController {
             WebElement botonEliminar = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//i[contains(@class,'bi-trash')]")));
-
             botonEliminar.click();
-
             WebElement botonConfirmar = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//button[normalize-space()='Yes, Delete']")));
-
             botonConfirmar.click();
 
         } catch (Exception e) {
