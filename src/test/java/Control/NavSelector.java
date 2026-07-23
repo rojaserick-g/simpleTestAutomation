@@ -5,20 +5,29 @@ import Constant.Navegador;
 import static Constant.Navegador.*;
 
 public class NavSelector {
-    static Navegador nav;
 
     public static Navegador seleccionNavegador(String navegador) {
-        switch (navegador.trim()) {
-            case "Chrome":
-                nav = Chrome;
-                return nav;
-            case "Edge":
-                nav = Edge;
-                return nav;
-            case "Firefox":
-                nav = Firefox;
-                return nav;
+
+        if (navegador == null || navegador.trim().isEmpty()) {
+            return Chrome;
         }
-        return Chrome;
+
+        switch (navegador.trim()) {
+
+            case "Chrome":
+                return Chrome;
+
+            case "Edge":
+                return Edge;
+
+            case "Firefox":
+                return Firefox;
+
+            case "BrowserStack":
+                return BrowserStack;
+
+            default:
+                return Chrome;
+        }
     }
 }

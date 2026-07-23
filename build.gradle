@@ -8,7 +8,8 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
-java{
+
+java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
@@ -21,15 +22,15 @@ dependencies {
 
     // Selenium
     implementation 'org.seleniumhq.selenium:selenium-java:4.30.0'
-    //implementation 'io.github.bonigarcia:webdrivermanager:5.8.1'
+
     // Cucumber
-    implementation 'io.cucumber:cucumber-java:7.14.0'
-    implementation 'io.cucumber:cucumber-junit:7.14.0'
+    testImplementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.14.0'
 
     // JUnit
     testImplementation 'junit:junit:4.13.2'
 
-    //IA
+    // IA
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
 }
@@ -40,7 +41,12 @@ test {
 
 task browserStackTest(type: Test) {
     useJUnit()
-    include '**/Runner/*Runner.class'
-    description = 'Ejecuta los tests de BrowserStack'
+
+    include '**/Runner/BrowserStackRunner.class'
+
+    // ESTA ES LA LÍNEA IMPORTANTE
+    systemProperty "nav", "BrowserStack"
+
+    description = 'Ejecuta únicamente BrowserStackRunner'
     group = 'verification'
 }

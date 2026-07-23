@@ -5,16 +5,13 @@ import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
 
 /**
- * Runner para ejecutar tests SOLO en BrowserStack
- * Ejecuta ÚNICAMENTE el archivo browserstack_test.feature
- * 
- * Uso: gradle test --tests BrowserStackRunner
+ * Runner para ejecutar el escenario TC-001 de PIM en BrowserStack
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = "src/test/resources/features/browserstack_test.feature",
+        features = "src/test/resources/features/PIM.feature",
         glue = {"StepDefinition"},
-        tags = "@browserstack",
+        tags = "@TC-001",
         plugin = {
                 "pretty",
                 "html:target/browserstack-report.html",
@@ -24,4 +21,3 @@ import org.junit.runner.RunWith;
 )
 public class BrowserStackRunner {
 }
-

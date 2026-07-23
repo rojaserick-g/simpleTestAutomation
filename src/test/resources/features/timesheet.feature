@@ -140,7 +140,7 @@ Feature: Employee Timesheet Management
     Given employee "<employeeName>" timesheet is editable
     When the user enters "<hours>" hours
     And saves the timesheet
-    Then a validation message should be displayed
+    Then a timesheet validation message should be displayed
 
     Examples:
       | employeeName | hours |

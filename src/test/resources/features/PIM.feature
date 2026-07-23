@@ -8,7 +8,7 @@ Feature: Employee List Search and Filters
 
 
     #Buscar un empleado por nombre
-  @PIM @TC-001
+  @browserstack @PIM @TC-001
   Scenario Outline: Search employee by name
     When the user enters "<employeeName>" in PIM Employee Name field
     And clicks Search

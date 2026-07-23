@@ -226,7 +226,7 @@ public class TimesheetDefinition {
         timesheetPage.updateHoursForDay("Monday", hours);
     }
 
-    @Then("a validation message should be displayed")
+    @Then("a timesheet validation message should be displayed")
     public void aValidationMessageShouldBeDisplayed() {
         boolean isErrorDisplayed = timesheetPage.isValidationMessageDisplayed();
         Assert.assertTrue("No se mostró el mensaje de validación esperado para horas negativas.", isErrorDisplayed);
