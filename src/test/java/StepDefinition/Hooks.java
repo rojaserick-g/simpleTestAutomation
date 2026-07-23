@@ -1,6 +1,7 @@
 package StepDefinition;
 
 import Constant.Constant;
+import Control.BrowserStackCredentials;
 import Control.DriverContext;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
@@ -12,6 +13,7 @@ import org.openqa.selenium.TakesScreenshot;
 public class Hooks {
     private Scenario scenario;
     private static final String tomarCapturaPantalla;
+    private static boolean credentialsValidated = false;
 
     static{
         tomarCapturaPantalla = System.getProperty("evidence","fullEvidence");
@@ -22,6 +24,13 @@ public class Hooks {
         this.scenario = scenario;
         Constant.scenarioStep = scenario;
         Constant.build_name = "Nombre de Proyecto";
+        
+        // Valida credenciales de BrowserStack una sola vez
+        if (!credentialsValidated) {
+            System.out.println("\n📋 Validando configuración de BrowserStack...");
+            BrowserStackCredentials.printConfig();
+            credentialsValidated = true;
+        }
     }
 
     @After

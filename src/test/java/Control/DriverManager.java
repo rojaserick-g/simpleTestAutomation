@@ -34,6 +34,27 @@ public class DriverManager {
                 this.driver = new ChromeDriver(configuracionChrome);
                 this.driver.manage().deleteAllCookies();
             }
+            case BrowserStack -> {
+                System.out.println("BrowserStack seleccionado");
+                if (!BrowserStackManager.isBrowserStackConfigured()) {
+                    System.out.println("ERROR: BrowserStack no está configurado. " +
+                            "Asegúrate de establecer BROWSERSTACK_USERNAME y BROWSERSTACK_ACCESS_KEY");
+                    throw new RuntimeException("BrowserStack credentials not found");
+                }
+                try {
+                    String browserVersion = System.getenv("BS_BROWSER_VERSION") != null ? 
+                                           System.getenv("BS_BROWSER_VERSION") : "latest";
+                    String bsOs = System.getenv("BS_OS") != null ? 
+                                   System.getenv("BS_OS") : "Windows";
+                    String bsOsVersion = System.getenv("BS_OS_VERSION") != null ? 
+                                      System.getenv("BS_OS_VERSION") : "11";
+                    
+                    this.driver = BrowserStackManager.createBrowserStackDriver("Chrome", browserVersion, bsOs, bsOsVersion);
+                } catch (Exception e) {
+                    System.out.println("Error conectando a BrowserStack: " + e.getMessage());
+                    throw new RuntimeException(e);
+                }
+            }
             default -> System.out.println("No es posible levantar el navegador " + nav);
         }
         if (this.driver != null) {

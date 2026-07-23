@@ -13,7 +13,7 @@ Feature: Leave List Management
     And the user is logged into OrangeHRM with user "Admin" and password "admin123"
     And user navigates to Leave List page
 
-  @search_leave_request @test-01
+  @search_leave_request @test-01 @browserstack
   Scenario Outline: Search leave request with multiple filters
     When the user enters from date "<from_date>"
     And the user enters to date "<to_date>"
